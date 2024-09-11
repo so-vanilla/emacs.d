@@ -1,0 +1,690 @@
+
+#+title: Config
+
+* Emacs
+** Settings
+*** Show only filename in title bar
+#+begin_src emacs-lisp
+(setq frame-title-format '("%b"))
+#+end_src
+
+*** Disable bell
+#+begin_src emacs-lisp
+(setq ring-bell-function 'ignore)
+#+end_src
+
+*** Selet file without mouse
+#+begin_src emacs-lisp
+(setq use-file-dialog nil)
+#+end_src
+
+*** yes/no to y/n
+#+begin_src emacs-lisp
+(setq use-short-answers t)
+#+end_src
+
+*** Open empty buffer when launch
+#+begin_src emacs-lisp
+(setq inhibit-splash-screen t
+      inhibit-startup-screen t)
+#+end_src
+
+*** Disable buffer menu when open multiple file
+#+begin_src emacs-lisp
+(setq inhibit-startup-buffer-menu t)
+#+end_src
+
+*** Show whitespace on tail
+#+begin_src emacs-lisp
+(setq show-trailing-whitespace t)
+#+end_src
+
+*** Disable scroll bar
+#+begin_src emacs-lisp
+(scroll-bar-mode -1)
+#+end_src
+
+*** Disable menu bar
+#+begin_src emacs-lisp
+(menu-bar-mode -1)
+#+end_src
+
+*** Disable tool bar
+#+begin_src emacs-lisp
+(tool-bar-mode -1)
+#+end_src
+
+*** Show numbers
+#+begin_src emacs-lisp
+(global-display-line-numbers-mode t)
+(setq display-line-numbers-type 'relative)
+#+end_src
+
+*** Make C-k to delete all line
+#+begin_src emacs-lisp
+(setq kill-whole-line t)
+#+end_src
+
+*** Highlight text in parenth
+#+begin_src emacs-lisp
+(show-paren-mode t)
+(setq show-paren-style 'mixed)
+#+end_src
+
+*** Connect to wl-clipboard
+#+begin_src emacs-lisp
+(setq wl-copy-process nil)
+(defun wl-copy (text)
+  (setq wl-copy-process (make-process :name "wl-copy"
+                                      :buffer nil
+				      :command '("wl-copy" "-f" "-n")
+				      :connection-type 'pipe
+				      :noquery t))
+  (process-send-string wl-copy-process text)
+  (process-send-eof wl-copy-process))
+
+(defun wl-paste ()
+  (if (and wl-copy-process (process-live-p wl-copy-process))
+    nil
+    (shell-command-to-string "wl-paste -n | tr -d \\r")))
+
+(setq interprogram-cut-function 'wl-copy)
+(setq interprogram-paste-function 'wl-paste)
+#+end_src
+
+*** Disable backup file
+#+begin_src emacs-lisp
+(setq make-backup-files nil
+      backup-inhibited nil
+      create-lockfiles nil)
+#+end_src
+
+*** Tab size
+#+begin_src emacs-lisp
+(setq tab-width 4)
+#+end_src
+
+*** Tab to whitespace
+#+begin_src emacs-lisp
+(setq indent-tabs-mode nil)
+#+end_src
+
+*** Font
+#+begin_src emacs-lisp
+(set-face-attribute 'default nil
+                    :family "DejaVuSansM Nerd Font Mono"
+		    :height 100
+		    :weight 'normal
+		    :width 'normal)
+#+end_src
+
+*** Move window after split
+#+begin_src emacs-lisp
+(defun split-window-below-and-switch ()
+  (interactive)
+  (split-window-below)
+  (other-window 1))
+
+(defun split-window-right-and-switch ()
+  (interactive)
+  (split-window-right)
+  (other-window 1))
+
+(global-set-key (kbd "C-x 2") 'split-window-below-and-switch)
+(global-set-key (kbd "C-x 3") 'split-window-right-and-switch)
+#+end_src
+
+*** Don't show warning in buffer
+#+begin_src emacs-lisp
+(setq display-warning-minimum-level :error)
+#+end_src
+
+** Binds
+*** C-h backspace
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-h") 'delete-backward-char)
+(keyboard-translate ?\C-h ?\C-?)
+(global-set-key (kbd "C-?") 'help-command)
+#+end_src
+
+*** C-x d cd
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-x C-d") 'cd)
+#+end_src
+
+*** C-x r ~redo~
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-x r") 'undo-redo)
+#+end_src
+
+** Util functions
+*** Get path to the command
+#+begin_src emacs-lisp
+(defun get-path-to-command (command)
+  "Get path to the executable command"
+  (string-trim
+   (shell-command-to-string
+    (concat "which " command))))
+#+end_src
+
+** Util variables
+*** Completion functions
+#+begin_src emacs-lisp
+(defvar completion-functions
+  '(cape-file cape-dabbrev cape-keyword))
+#+end_src
+
+* use-package
+** Input
+*** ddskk --- Japanese input method
+#+begin_src emacs-lisp
+(use-package ddskk
+  :ensure t
+  :bind
+  (("C-x C-j" . 'skk-mode))
+  :custom
+  (skk-large-jisyo (expand-file-name "~/repos/github.com/skk-dev/dict/SKK-JISYO.L"))
+  :config
+  (require 'ccc))
+#+end_src
+
+*** corfu --- Completion frontend
+#+begin_src emacs-lisp
+(use-package corfu
+  :ensure t
+  :custom
+  (corfu-auto t)
+  (corfu-auto-delay 0.0)
+  (corfu-auto-refix 1)
+  :init
+  (global-corfu-mode 1))
+#+end_src
+
+*** cape --- Completion backend
+#+begin_src emacs-lisp
+(use-package cape
+  :ensure t
+  :init
+  (setq completion-at-point-functions completion-functions))
+#+end_src
+
+
+*** smartparens --- auto pair
+#+begin_src emacs-lisp
+(use-package smartparens
+  :ensure t
+  :hook
+  (prog-mode text-mode markdown-mode)
+  :config
+  (require 'smartparens-config))
+#+end_src
+
+*** aggressive-indent --- auto indentation
+#+begin_src emacs-lisp
+(use-package aggressive-indent
+  :ensure t
+  :hook
+  ((rust-mode . aggressive-indent-mode)
+   (python-mode . aggressive-indent-mode))
+  :config
+  (global-aggressive-indent-mode 1))
+#+end_src
+
+** Tree-sitter
+#+begin_src emacs-lisp
+(use-package tree-sitter
+  :ensure t
+  :hook
+  (prog-mode . tree-sitter-mode)
+  :config
+  (global-tree-sitter-mode 1)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+  
+(use-package tree-sitter-langs
+  :ensure t
+  :after
+  (tree-sitter))
+#+end_src
+
+** Git
+*** magit
+#+begin_src emacs-lisp
+(use-package magit
+  :ensure t)
+#+end_src
+
+** Ivy
+*** ivy
+#+begin_src emacs-lisp
+(use-package ivy
+  :ensure t
+  :custom
+  (ivy-use-virtual-buffer t)
+  (enable-recursive-minibuffers t)
+  :bind
+  ("C-s" . 'swiper-isearch)
+  ("C-r" . 'swiper-isearch-backward)
+  ("C-/" . 'swiper)
+  ("C-c C-r" . 'ivy-resume)
+  ("<f6>" . 'ivy-resume)
+  ("M-x" . 'counsel-M-x)
+  ("C-x C-f" . 'counsel-find-file)
+  ("C-x b" . 'counsel-switch-buffer)
+  ("<f2> f c" . 'counsel-flycheck)
+  ("<f2> f l" . 'counsel-find-library)
+  ("<f2> d f" . 'counsel-describe-function)
+  ("<f2> d v" . 'counsel-describe-variable)
+  ("<f2> d s" . 'counsel-describe-symbol)
+  ("<f2> u c" . 'counsel-unicode-char)
+  ("<f2> g i t" . 'counsel-git)
+  ("<f2> g g" . 'counsel-git-grep)
+  ("<f2> g c w" . 'counsel-git-change-worktree)
+  ("<f2> g c o" . 'counsel-git-checkout)
+  ("<f2> g s" . 'counsel-git-stash)
+  ("<f2> g l" . 'counsel-git-log)
+  ("<f2> o g t" . 'counsel-org-goto)
+  ("<f2> o g a" . 'counsel-org-goto-all)
+  ("<f2> o t t" . 'counsel-org-tag)
+  ("<f2> o t a" . 'counsel-org-tag-agenda)
+  ("<f2> o a h" . 'counsel-org-agenda-headlines)
+  ("<f2> o l" . 'counsel-org-link)
+  ("<f2> o f" . 'counsel-org-file)
+  ("<f2> o c" . 'counsel-org-capture)
+  ("<f2> o e" . 'counsel-org-entity)
+  ("<f2> l w s" . 'lsp-ivy-workspace-symbol)
+  ("<f2> l g s" . 'lsp-ivy-global-workspace-symbol)
+  :config
+  (ivy-mode 1)
+  (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
+#+end_src
+
+*** counsel
+#+begin_src emacs-lisp
+(use-package counsel
+  :ensure t
+  :after
+  (ivy)
+  :config
+  (counsel-mode 1))
+#+end_src
+
+*** swiper
+#+begin_src emacs-lisp
+(use-package swiper
+  :ensure t
+  :after
+  (ivy))
+#+end_src
+
+*** lsp-ivy
+#+begin_src emacs-lisp
+(use-package lsp-ivy
+  :ensure t
+  :after
+  (ivy))
+#+end_src
+
+** File tree
+*** neotree
+#+begin_src emacs-lisp
+(use-package neotree
+  :ensure t
+  :bind
+  (("<f5>" . neotree-toggle))
+  :custom
+  (neo-theme (if (display-graphic-p) 'icons 'arrow)))
+#+end_src
+
+** UI
+*** org-modern
+#+begin_src emacs-lisp
+(use-package org-modern
+  :ensure t
+  :custom
+  (org-auto-align-tags nil)
+  (org-tags-column 0)
+  (org-fold-catch-invisible-edits 'show-and-error)
+  (org-special-ctrl-a/e t)
+  (org-insert-heading-respect-content t)
+  (org-hide-emphasis-markers t)
+  (org-pretty-entities t)
+  (org-ellipsis "…")
+  (org-agenda-tags-column 0)
+  (org-agenda-block-separator ?─)
+  (org-agenda-time-grid
+    '((daily today require-timed)
+      (800 1000 1200 1400 1600 1800 2000)
+      " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+      org-agenda-current-time-string
+      "◀── now ─────────────────────────────────────────────────"))
+
+(with-eval-after-load 'org (global-org-modern-mode))
+#+end_src
+
+** Shell
+*** vterm
+#+begin_src emacs-lisp
+(use-package vterm
+  :ensure t
+  :config
+  (add-to-list 'vterm-keymap-exceptions "C-h"))
+#+end_src
+
+** Language settings
+*** c
+#+begin_src emacs-lisp
+(use-package cc-mode
+  :ensure t
+  :mode
+  (("\\.c\\'" . c-mode)
+   ("\\.h\\'" . c-mode)
+   ("\\.cpp\\'" . c++-mode)
+   ("\\.hpp\\'" . c++-mode))
+  :hook
+  ((c-mode . lsp-deferred)
+   (c++-mode . lsp-deferred)
+   (c-mode . (lambda ()
+	       (setq-local completion-at-point-functions (append completion-functions '(lsp-completion-at-point)))))  
+   (c++-mode . (lambda ()
+		 (setq-local completion-at-point-functions (append completion-functions '(lsp-completion-at-point))))))
+  :custom
+  (c-default-style "k&r")
+  (c-basic-offset 4))
+#+end_src
+
+*** nix
+#+begin_src emacs-lisp
+(use-package nix-mode
+  :ensure t
+  :mode
+  ("\\.nix\\'")
+  :hook
+  ((nix-mode . lsp-deferred)
+   (nix-mode . (lambda ()
+		 (setq-local completion-at-point-functions (append completion-functions '(lsp-completion-at-point)))))))
+#+end_src
+
+*** python
+#+begin_src emacs-lisp
+(use-package python-mode
+  :ensure t
+  :mode
+  ("\\.py\\'")
+  :hook
+  ((python-mode . lsp-deferred)
+   (python-mode . (lambda ()
+		    (setq-local completion-at-point-functions (append completion-functions '(lsp-completion-at-point)))))))
+
+(use-package lsp-pyright
+  :ensure t
+  :hook
+  (python-mode . (lambda ()
+		   (require 'lsp-pyright)
+		   (lsp))))
+#+end_src
+
+*** rust
+#+begin_src emacs-lisp
+(use-package rust-mode
+  :ensure t
+  :mode
+  ("\\.rs\\'")
+  :hook
+  ((rust-mode . lsp-deferred)
+   (rust-mode . (lambda ()
+		  (setq-local completion-at-point-functions (append completion-functions '(lsp-completion-at-point))))))
+  :custom
+  (rust-mode-tree-sitter-derive t))
+
+(use-package rustic
+  :ensure t
+  :after
+  (rust-mode)
+  :custom
+  (rustic-format-on-save t)
+  (rustic-cargo-use-last-stored-auguments t))
+
+(use-package flycheck-rust
+  :ensure t
+  :after
+  (rust-mode)
+  :config
+  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+
+(use-package cargo
+  :ensure t)
+#+end_src
+
+** LSP
+*** lsp-mode --- LSP client
+#+begin_src emacs-lisp
+(use-package lsp-mode
+  :ensure t
+  :commands
+  (lsp)
+  :hook
+  ((lsp-mode . lsp-enable-which-key-integration))
+  :custom
+  (lsp-keymap-prefix "C-c l")
+  (lsp-enable-file-watchers nil)
+  (lsp-enable-completion-at-point nil)
+  (lsp-enable-symbol-highlighting nil)
+  (lsp-modeline-diagnostics-enable t)
+  (lsp-completion-provider :capf)
+  (lsp-diagnostics-provider :flycheck)
+  (lsp-clangd-binary-path (get-path-to-command "clangd"))
+  (lsp-nix-nil-server-path (get-path-to-command "nil")))
+#+end_src
+
+*** lsp-ui --- Integration UI
+#+begin_src emacs-lisp
+(use-package lsp-ui
+  :ensure t
+  :hook
+  (lsp-mode)
+  :custom
+  (lsp-ui-sideline-enable t)
+  (lsp-ui-sideline-show-diagnostics t)
+  (lsp-ui-sideline-show-hover t)
+  (lsp-ui-sideline-show-code-actions t)
+  (lsp-ui-sideline-update-mode nil)
+  (lsp-ui-peek-enable t)
+  (lsp-ui-peek-show-directory t)
+  (lsp-ui-doc-enable nil)
+  :bind
+  (([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+   ([remap xref-find-references] . lsp-ui-peek-find-references)
+   ("C-c i" . lsp-ui-imenu)
+   ("C-c d" . lsp-ui-doc-show)))
+#+end_src
+
+*** flycheck --- Show Error and diagnostic
+#+begin_src emacs-lisp
+(use-package flycheck
+  :ensure t
+  :hook
+  (lsp-mode)
+  :config
+  (add-hook 'after-init-hook #'global-flycheck-mode)
+  :bind
+  (("M-n" . flycheck-next-error)
+   ("M-p" . flycheck-previous-error)))
+#+end_src
+
+** Org
+*** org
+#+begin_src emacs-lisp
+(use-package org
+  :ensure nil ;; built-in
+  :hook
+  (org-mode . (lambda ()
+		(setq-local completion-at-point-functions (append completion-functions '(cape-elisp-block cape-elisp-symbol)))))
+  :init
+  (defun insert-elisp-code-block ()
+    (interactive)
+    (org-insert-structure-template "src emacs-lisp"))
+  :custom
+  ;; indent settings
+  (org-src-preserve-indentation nil)
+  (org-edit-src-content-indentation 0)
+  ;; add keybinds
+  (org-use-speed-commands t)
+  ;; directory
+  (org-directory "~/org")
+  :config
+  (global-set-key (kbd "C-c e") 'insert-elisp-code-block)
+  :bind
+  (("C-c a" . 'org-agenda)))
+#+end_src
+
+*** org-agenda
+#+begin_src emacs-lisp
+(use-package org-agenda
+  :ensure nil ;; built-in
+  :after
+  (org
+   tramp)
+  :custom
+  ;; agenda
+  (org-agenda-files
+   (append
+    (list "~/org/todo.org")
+    (directory-files-recursively "~/org/journal" "\\.org$")))
+  (org-agenda-span 'day)
+  (org-agenda-skip-deadline-if-done nil)
+  (org-agenda-skip-scheduled-if-done nil)
+  (org-agenda-skip-deadline-prewarning-if-scheduled nil))
+#+end_src
+
+*** org-jorunal
+#+begin_src emacs-lisp
+(use-package org-journal
+  :ensure t
+  :after
+  (org)
+  :init
+  (defun my-org-journal-file-header-func (time)
+    "Custom function to create journal header."
+    (concat
+     "#+title: " (format-time-string "%Y-%m-%d (%A)" time) "\n\n"
+     "* Schedule\n\n"
+     "* Todo\n\n"
+     "* Note\n"))
+  :custom
+  (org-journal-dir "~/org/journal/")
+  (org-journal-enable-agenda-integration t)
+  (org-journal-file-format "%Y-%m-%d.org")
+  (org-journal-file-header 'my-org-journal-file-header-func))
+#+end_src
+
+*** tramp --- for webdav
+#+begin_src emacs-lisp
+(use-package tramp
+  :ensure nil ;; built-in
+  :defer t)
+#+end_src
+
+** EWW
+*** eww
+#+begin_src emacs-lisp
+(use-package eww
+  :ensure nil ;; built-in
+  :custom
+  (shr-use-images t)
+  (shr-use-colors t)
+  (shr-use-fonts t)
+  (shr-width nil)
+  (url-automatic-caching t)
+  (eww-buffer-name-function
+   (lambda () (format "*eww: %s*" (or (plist-get eww-data :title) "No Title"))))
+  (url-privacy-level '(email agent cookies lastlock))
+  (eww-download-directory "~/Downloads/")
+  (eww-use-external-browser-for-content-type "\\`\\(video/\\|audio/\\|application\ogg\\)")
+  (eww-form-checkbox-selected-symbol "[X]")
+  (eww-form-checkbox-symbol "[ ]")
+  (eww-history-limit 100)
+  (define-key eww-mode-map (kbd "C-s") 'isearch-forward)
+  (define-key eww-mode-map (kbd "C-r") 'isearch-backward)
+  :config
+  (define-key eww-mode-map (kbd "B") 'eww-browse-with-external-browser))
+#+end_src
+
+*** dom
+#+begin_src emacs-lisp
+(use-package dom
+  :ensure nil ;; built-in
+  :after
+  (eww))
+#+end_src
+
+*** shr
+#+begin_src emacs-lisp
+(use-package shr
+  :ensure nil ;; built-in
+  :after
+  (eww)
+  :custom
+  (shr-use-fonts t)
+  (shr-bullet "• "))
+#+end_src
+
+*** eww-lnum
+#+begin_src emacs-lisp
+(use-package eww-lnum
+  :ensure t
+  :after
+  (eww)
+  :config
+  (define-key eww-mode-map (kbd "f") 'eww-lnum-follow)
+  (define-key eww-mode-map (kbd "F") 'eww-lnum-universal))
+#+end_src
+
+** Theme
+*** catppuccin-theme
+#+begin_src emacs-lisp
+(use-package catppuccin-theme
+  :ensure t
+  :config
+  (setq catppuccin-flavor 'latte))
+
+(load-theme 'catppuccin :no-conform)
+#+end_src
+
+*** doom-modeline
+#+begin_src emacs-lisp
+(use-package doom-modeline
+  :ensure t
+  :init
+  (doom-modeline-mode 1))
+#+end_src
+
+*** nyan-mode
+#+begin_src emacs-lisp
+(use-package nyan-mode
+  :ensure t
+  :hook
+  (prog-mode . nyan-mode)
+  :custom
+  (nyan-wavy-trail t)
+  (nyan-animate-nayncat t)
+  (nayn-bar-length 16)
+  (nyan-minimum-window-width 80)
+  :config
+  (nyan-mode 1))
+#+end_src
+
+*** parrot
+#+begin_src emacs-lisp
+(use-package parrot
+  :ensure t
+  :custom
+  (parrot-num-rotations nil)
+  :config
+  (parrot-mode 1))
+#+end_src
+
+*** all-the-icons
+#+begin_src emacs-lisp
+(use-package all-the-icons
+  :ensure t)
+#+end_src
