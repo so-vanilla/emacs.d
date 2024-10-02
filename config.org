@@ -690,6 +690,19 @@
   (org-roam-db-autosync-mode 1))
 #+end_src
 
+*** org-caldav
+#+begin_src emacs-lisp
+(use-package org-caldav
+  :ensure t
+  :custom
+  (org-caldav-url "https://webmail.gandi.net/SOGo/dav/somura-vanilla@so-icecream.com/Calendar")
+  (org-caldav-calendar-id "personal")
+  (org-caldav-inbox "~/org/caldav.org")
+  (org-icalendar-timezone "Asia/Tokyo")
+  (org-icalendar-include-todo 'all)
+  (org-caldav-sync-todo t))
+#+end_src
+
 *** org-babel
 #+begin_src emacs-lisp
 (org-babel-do-load-languages
