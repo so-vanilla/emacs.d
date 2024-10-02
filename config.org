@@ -1,4 +1,3 @@
-
 #+title: Config
 
 * Emacs
@@ -171,7 +170,10 @@
 *** Completion functions
 #+begin_src emacs-lisp
 (defvar completion-functions
-  '(cape-file cape-dabbrev cape-keyword))
+  '(cape-file
+    cape-dabbrev
+    cape-keyword
+    yasnippet-capf))
 #+end_src
 
 * use-package
@@ -181,7 +183,7 @@
 (use-package ddskk
   :ensure t
   :bind
-  (("C-x C-j" . 'skk-mode))
+  (("C-x C-j" . skk-mode))
   :custom
   (skk-large-jisyo (expand-file-name "~/repos/github.com/skk-dev/dict/SKK-JISYO.L"))
   :config
@@ -197,7 +199,10 @@
   (corfu-auto-delay 0.0)
   (corfu-auto-refix 1)
   :init
-  (global-corfu-mode 1))
+  (global-corfu-mode 1)
+  :config
+  (define-key corfu-map [return] nil)
+  (define-key corfu-map (kbd "RET") nil))
 #+end_src
 
 *** cape --- Completion backend
@@ -206,8 +211,32 @@
   :ensure t
   :init
   (setq completion-at-point-functions completion-functions))
-#+end_src
+  #+end_src
 
+*** yasnippet
+#+begin_src emacs-lisp
+(use-package yasnippet
+  :ensure t
+  :hook
+  ((prog-mode . yas-minor-mode)
+   (org-mode . yas-minor-mode))
+  :custom
+  (yas-keymap-disable-hook t)
+  (yas-expand-from-trigger-key nil)
+  (yas-snippet-dirs
+   '("~/.emacs.d/snippets"))
+  :config
+  (yas-reload-all)
+  :bind
+  (("C-c y n" . yas-next-field)
+   ("C-c y p" . yas-prev-field)))
+
+(use-package yasnippet-capf
+  :ensure t
+  :after
+  (corfu
+   yasnippet))
+ #+end_src
 
 *** smartparens --- auto pair
 #+begin_src emacs-lisp
@@ -324,6 +353,23 @@
   (ivy))
 #+end_src
 
+*** ivy-rich
+#+begin_src emacs-lisp
+(use-package ivy-rich
+  :ensure t
+  :after
+  (ivy)
+  :config
+  (ivy-rich-mode 1))
+
+(use-package all-the-icons-ivy-rich
+  :ensure t
+  :after
+  (ivy)
+  :config
+  (all-the-icons-ivy-rich-mode 1))
+#+end_src
+
 ** File tree
 *** neotree
 #+begin_src emacs-lisp
@@ -361,13 +407,28 @@
 (with-eval-after-load 'org (global-org-modern-mode))
 #+end_src
 
+*** pdf-tools
+#+begin_src emacs-lisp
+(use-package pdf-tools
+  :ensure t
+  :config
+  (pdf-tools-install)
+  (setq-default pdf-view-display-size 'fit-page)
+  :hook (pdf-view-mode . (lambda () (display-line-numbers-mode -1))))
+
+(add-to-list 'auto-mode-alist '("\\.pdf\\'" . pdf-view-mode))
+#+end_src
+
 ** Shell
 *** vterm
 #+begin_src emacs-lisp
 (use-package vterm
   :ensure t
-  :config
-  (add-to-list 'vterm-keymap-exceptions "C-h"))
+  :commands
+  (vterm)
+  :hook
+  ((vterm-mode . (lambda ()
+		   (local-set-key (kbd "C-h") 'vterm-send-backspace)))))
 #+end_src
 
 ** Language settings
@@ -390,6 +451,48 @@
   :custom
   (c-default-style "k&r")
   (c-basic-offset 4))
+#+end_src
+
+*** clojure
+#+begin_src emacs-lisp
+(use-package clojure-mode
+  :ensure t
+  :mode
+  (("\\.clj\\'" . clojure-mode)
+   ("\\.cljs\\'" . clojurescript-mode)
+   ("\\.cljc\\'" . clojurec-mode))
+  :hook
+  ((clojure-mode . lsp-deferred)
+   (clojure-mode . (lambda ()
+		     (setq-local completion-at-point-functions (append completion-functions '(lsp-completion-at-point)))))
+   (clojurescript-mode . lsp-deferred)
+   (clojurescript-mode . (lambda ()
+			   (setq-local completion-at-point-functions (append completion-functions '(lsp-completion-at-point)))))
+   (clojurec-mode . lsp-deferred)
+   (clojurec-mode . (lambda ()
+		      (setq-local completion-at-point-functions (append completion-functions '(lsp-completion-at-point)))))))
+#+end_src
+
+*** clojure with org babel
+#+begin_src emacs-lisp
+(use-package cider
+  :ensure t)
+(require 'ob-clojure)
+(setq org-babel-clojure-backend 'cider)
+(setq cider-repl-pop-to-buffer-on-connect nil)
+#+end_src
+
+*** java
+#+begin_src emacs-lisp
+(use-package lsp-java
+  :ensure t
+  :hook
+  ((java-mode . lsp-deffered)
+   (java-mode . (lambda ()
+		  (require 'lsp-java)
+		  (lsp)))
+   (java-mode . (lambda ()
+		  (setq-local completion-at-point-functions (append completion-functions '(lsp-completion-at-point)))))))
 #+end_src
 
 *** nix
@@ -473,6 +576,7 @@
   (lsp-completion-provider :capf)
   (lsp-diagnostics-provider :flycheck)
   (lsp-clangd-binary-path (get-path-to-command "clangd"))
+  (lsp-clojure-server-store-path (get-path-to-command "clojure-lsp"))
   (lsp-nix-nil-server-path (get-path-to-command "nil")))
 #+end_src
 
@@ -490,12 +594,14 @@
   (lsp-ui-sideline-update-mode nil)
   (lsp-ui-peek-enable t)
   (lsp-ui-peek-show-directory t)
-  (lsp-ui-doc-enable nil)
+  (lsp-ui-doc-enable t)
+  (lsp-ui-doc-position 'at-point)  
   :bind
   (([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
    ([remap xref-find-references] . lsp-ui-peek-find-references)
    ("C-c i" . lsp-ui-imenu)
-   ("C-c d" . lsp-ui-doc-show)))
+   ("C-c d s" . lsp-ui-doc-show)
+   ("C-c d h" . lsp-ui-doc-hide)))
 #+end_src
 
 *** flycheck --- Show Error and diagnostic
@@ -518,21 +624,21 @@
   :ensure nil ;; built-in
   :hook
   (org-mode . (lambda ()
-		(setq-local completion-at-point-functions (append completion-functions '(cape-elisp-block cape-elisp-symbol)))))
+		(setq-local completion-at-point-functions (append completion-functions '(cape-elisp-block cape-elisp-symbol)))
+		(local-set-key (kbd "C-c e") 'insert-elisp-code-block)
+		(local-set-key (kbd "C-c t") 'insert-timestamp)))
   :init
   (defun insert-elisp-code-block ()
     (interactive)
     (org-insert-structure-template "src emacs-lisp"))
+  (defun insert-timestamp ()
+    (interactive)
+    (insert (format-time-string "<%Y-%m-%d %H:%M>")))
   :custom
-  ;; indent settings
   (org-src-preserve-indentation nil)
   (org-edit-src-content-indentation 0)
-  ;; add keybinds
   (org-use-speed-commands t)
-  ;; directory
   (org-directory "~/org")
-  :config
-  (global-set-key (kbd "C-c e") 'insert-elisp-code-block)
   :bind
   (("C-c a" . 'org-agenda)))
 #+end_src
@@ -546,10 +652,7 @@
    tramp)
   :custom
   ;; agenda
-  (org-agenda-files
-   (append
-    (list "~/org/todo.org")
-    (directory-files-recursively "~/org/journal" "\\.org$")))
+  (org-agenda-files '("~/org/todo.org" "~/org/schedule.org"))
   (org-agenda-span 'day)
   (org-agenda-skip-deadline-if-done nil)
   (org-agenda-skip-scheduled-if-done nil)
@@ -562,19 +665,90 @@
   :ensure t
   :after
   (org)
-  :init
-  (defun my-org-journal-file-header-func (time)
-    "Custom function to create journal header."
-    (concat
-     "#+title: " (format-time-string "%Y-%m-%d (%A)" time) "\n\n"
-     "* Schedule\n\n"
-     "* Todo\n\n"
-     "* Note\n"))
   :custom
   (org-journal-dir "~/org/journal/")
-  (org-journal-enable-agenda-integration t)
-  (org-journal-file-format "%Y-%m-%d.org")
-  (org-journal-file-header 'my-org-journal-file-header-func))
+  (org-journal-file-format "%Y-%m-%d.org"))
+#+end_src
+
+*** org-roam
+#+begin_src emacs-lisp
+(use-package org-roam
+  :ensure t
+  :hook
+  ((org-mode . (lambda ()
+		 (local-set-key (kbd "C-c r t a") 'org-roam-tag-add)
+		 (local-set-key (kbd "C-c r t r") 'org-roam-tag-remove)
+		 (local-set-key (kbd "C-c r a a") 'org-roam-alias-add)
+		 (local-set-key (kbd "C-c r a r") 'org-roam-alias-remove)
+		 (local-set-key (kbd "C-c r n i") 'org-roam-node-insert))))
+  :bind
+  (("C-c r n f" . org-roam-node-find)
+   ("C-c r d t" . org-roam-dailies-capture-today))
+  :custom
+  (org-roam-directory (file-truename "~/org/org-roam"))
+  :config
+  (org-roam-db-autosync-mode 1))
+#+end_src
+
+*** org-babel
+#+begin_src emacs-lisp
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (clojure . t)
+   (shell . t)))
+#+end_src
+
+*** org to latex
+#+begin_src emacs-lisp
+(use-package ox-latex
+  :ensure nil ;; included org
+  :after
+  (org)
+  :custom
+  (org-latex-pdf-process
+   '("latexmk -lualatex -shell-escape -interaction=nonstopmode -file-line-error -synctex=1 -output-directory=%o %f"))
+  (org-latex-src-block-backend 'listings)
+  (org-latex-listings-options
+   '(("basicstyle" "\\ttfamily")
+     ("showstringspaces" "false")
+     ("keywordstyle" "\\color{blue}\\textbf")
+     ("commentstyle" "\\color{gray}")
+     ("stringstyle" "\\color{green!70!black}")
+     ("stringstyle" "\\color{red}")
+     ("frame" "single")
+     ("numbers" "left")
+     ("numberstyle" "\\ttfamily")
+     ("columns" "fullflexible")))
+  :config
+  (add-to-list 'org-latex-classes
+               '("beamer"
+                 "\\documentclass[presentation]{beamer}
+                 \\usepackage{luatexja}
+                 \\usepackage{hyperref}
+                 [NO-DEFAULT-PACKAGES]
+                 [PACKAGES]
+                 [EXTRA]"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
+  (add-to-list 'org-latex-classes
+               '("jlreq"
+                 "\\documentclass{jlreq}
+                 \\usepackage{luatexja}
+                 [NO-DEFAULT-PACKAGES]
+                 [PACKAGES]
+                 [EXTRA]"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+
+(use-package ox-beamer
+  :ensure nil ;; included org
+  :after
+  (ox-latex)  )
 #+end_src
 
 *** tramp --- for webdav
@@ -687,4 +861,19 @@
 #+begin_src emacs-lisp
 (use-package all-the-icons
   :ensure t)
+#+end_src
+
+*** nerd-icons
+#+begin_src emacs-lisp
+(use-package nerd-icons
+  :ensure t)
+#+end_src
+
+*** kind-icon
+#+begin_src emacs-lisp
+(use-package kind-icon
+  :ensure t
+  :after corfu
+  :config
+  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 #+end_src
