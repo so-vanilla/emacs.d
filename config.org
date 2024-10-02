@@ -138,6 +138,11 @@
 (setq display-warning-minimum-level :error)
 #+end_src
 
+*** Don't finish mark-mode when use isearch
+#+begin_src emacs-lisp
+(setq isearch-allow-scroll t)
+#+end_src
+
 ** Binds
 *** C-h backspace
 #+begin_src emacs-lisp
@@ -246,17 +251,6 @@
   (prog-mode text-mode markdown-mode)
   :config
   (require 'smartparens-config))
-#+end_src
-
-*** aggressive-indent --- auto indentation
-#+begin_src emacs-lisp
-(use-package aggressive-indent
-  :ensure t
-  :hook
-  ((rust-mode . aggressive-indent-mode)
-   (python-mode . aggressive-indent-mode))
-  :config
-  (global-aggressive-indent-mode 1))
 #+end_src
 
 ** Tree-sitter
