@@ -1,4 +1,4 @@
-#+title: Config
+#+Title: Config
 
 * Emacs
 ** Settings
@@ -57,11 +57,6 @@
 #+begin_src emacs-lisp
 (global-display-line-numbers-mode t)
 (setq display-line-numbers-type 'relative)
-#+end_src
-
-*** Make C-k to delete all line
-#+begin_src emacs-lisp
-(setq kill-whole-line t)
 #+end_src
 
 *** Highlight text in parenth
@@ -161,6 +156,18 @@
 (global-set-key (kbd "C-x r") 'undo-redo)
 #+end_src
 
+*** C-a implement
+#+begin_src emacs-lisp
+(defun my-move-beginning-of-line ()
+  "Move point to first non-whitespace character or beginning-of-line."
+  (interactive "^")
+  (let ((orig-point (point)))
+    (back-to-indentation)
+    (when (= orig-point (point))
+      (move-beginning-of-line 1))))
+(global-set-key (kbd "C-a") 'my-move-beginning-of-line)
+#+end_src
+
 ** Util functions
 *** Get path to the command
 #+begin_src emacs-lisp
@@ -235,6 +242,9 @@
   :bind
   (("C-c y n" . yas-next-field)
    ("C-c y p" . yas-prev-field)))
+
+(use-package yasnippet-snippets
+  :ensure t)
 
 (use-package yasnippet-capf
   :ensure t
@@ -487,6 +497,8 @@
 		  (lsp)))
    (java-mode . (lambda ()
 		  (setq-local completion-at-point-functions (append completion-functions '(lsp-completion-at-point)))))))
+
+()
 #+end_src
 
 *** nix
@@ -646,11 +658,41 @@
    tramp)
   :custom
   ;; agenda
-  (org-agenda-files '("~/org/todo.org" "~/org/schedule.org"))
+  (org-agenda-files '("~/org/todo.org" "~/org/schedule.org" "~/org/caldav.org"))
   (org-agenda-span 'day)
   (org-agenda-skip-deadline-if-done nil)
   (org-agenda-skip-scheduled-if-done nil)
   (org-agenda-skip-deadline-prewarning-if-scheduled nil))
+#+end_src
+
+*** org-super-agenda
+#+begin_src emacs-lisp
+(use-package org-super-agenda
+  :ensure t
+  :custom
+  (org-super-agenda-groups
+   '((:name "Today"  ; Optionally specify section name
+            :time-grid t  ; Items that appear on the time grid
+            :todo "TODAY")  ; Items that have this TODO keyword
+     (:name "Important"
+            :tag "bills"
+            :priority "A")
+     (:order-multi (2 (:name "Shopping in town"
+                             :and (:tag "shopping" :tag "@town"))
+                      (:name "Food-related"
+                             :tag ("food" "dinner"))
+                      (:name "Personal"
+                             :habit t
+                             :tag "personal")
+                      (:name "Space-related (non-moon-or-planet-related)"
+                             :and (:regexp ("space" "NASA")
+                                           :not (:regexp "moon" :tag "planet")))))
+     (:todo "WAITING" :order 8)  ; Set order of this section
+     (:todo ("SOMEDAY" "TO-READ" "CHECK" "TO-WATCH" "WATCHING")
+            :order 9)
+     (:priority<= "B" :order 1)))
+  :config
+  (org-agenda nil "a"))  
 #+end_src
 
 *** org-jorunal
@@ -883,4 +925,13 @@
   :after corfu
   :config
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+#+end_src
+
+** Others
+*** emacs-direnv
+#+begin_src emacs-lisp
+(use-package direnv
+  :ensure t
+  :config
+  (direnv-mode))
 #+end_src
