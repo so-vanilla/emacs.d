@@ -592,18 +592,8 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 #+begin_src emacs-lisp
 (use-package org
   :ensure nil ;; built-in
-  :hook
   (org-mode . (lambda ()
-		(setq-local completion-at-point-functions (append completion-functions '(cape-elisp-block cape-elisp-symbol)))
-		(local-set-key (kbd "C-c e") 'insert-elisp-code-block)
-		(local-set-key (kbd "C-c t") 'insert-timestamp)))
-  :init
-  (defun insert-elisp-code-block ()
-    (interactive)
-    (org-insert-structure-template "src emacs-lisp"))
-  (defun insert-timestamp ()
-    (interactive)
-    (insert (format-time-string "<%Y-%m-%d %H:%M>")))
+		(setq-local completion-at-point-functions (append completion-functions '(cape-elisp-block cape-elisp-symbol)))))
   :custom
   (org-src-preserve-indentation nil)
   (org-edit-src-content-indentation 0)
@@ -613,10 +603,10 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   (:map global-map
 	("C-c a" . 'org-agenda)
 	:map org-mode-map
-	("C-c f h e" . 'org-fold-hide-entry)
-	("C-c f h a" . 'org-fold-hide-block-all)
-	("C-c f s e" . 'org-fold-show-entry)
-	("C-c f s a" . 'org-fold-show-all)))
+	("C-c C-f h e" . 'org-fold-hide-entry)
+	("C-c C-f h a" . 'org-fold-hide-block-all)
+	("C-c C-f s e" . 'org-fold-show-entry)
+	("C-c C-f s a" . 'org-fold-show-all)))
 #+end_src
 
 ** org-agenda
@@ -697,15 +687,15 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   :ensure t
   :hook
   ((org-mode . (lambda ()
-		 (local-set-key (kbd "C-c r t a") 'org-roam-tag-add)
-		 (local-set-key (kbd "C-c r t r") 'org-roam-tag-remove)
-		 (local-set-key (kbd "C-c r a a") 'org-roam-alias-add)
-		 (local-set-key (kbd "C-c r a r") 'org-roam-alias-remove)
-		 (local-set-key (kbd "C-c r n i") 'org-roam-node-insert))))
+		 (local-set-key (kbd "C-c C-r t a") 'org-roam-tag-add)
+		 (local-set-key (kbd "C-c C-r t r") 'org-roam-tag-remove)
+		 (local-set-key (kbd "C-c C-r a a") 'org-roam-alias-add)
+		 (local-set-key (kbd "C-c C-r a r") 'org-roam-alias-remove)
+		 (local-set-key (kbd "C-c C-r n i") 'org-roam-node-insert))))
   :bind
   (:map global-map
-	("C-c r n f" . org-roam-node-find)
-	("C-c r d t" . org-roam-dailies-capture-today))
+	("C-c C-r n f" . org-roam-node-find)
+	("C-c C-r d t" . org-roam-dailies-capture-today))
   :custom
   (org-roam-directory (file-truename "~/org/org-roam"))
   :config
