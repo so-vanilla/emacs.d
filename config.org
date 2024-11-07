@@ -278,8 +278,8 @@ completion-at-point-functionを提供
   (yas-reload-all)
   :bind
   (:map global-map
-	("C-c y n" . yas-next-field)
-	("C-c y p" . yas-prev-field)))
+	("M-[" . yas-next-field)
+	("M-]" . yas-prev-field)))
 
 #+end_src
 
