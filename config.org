@@ -129,11 +129,20 @@ yes-or-no-pの代わりにy-or-n-pを表示
 (setq isearch-allow-scroll t)
 #+end_src
 
-"C-"hをヘルプからバックワードに変更
+"C-h"をヘルプからバックワードに変更
 #+begin_src emacs-lisp
 (global-set-key (kbd "C-h") 'delete-backward-char)
 (keyboard-translate ?\C-h ?\C-?)
 (global-set-key (kbd "C-?") 'help-command)
+#+end_src
+
+"M-f"の挙動を変更
+#+begin_src emacs-lisp
+(defun wrap-forward-word ()
+  (interactive)
+  (forward-word 2)
+  (backward-word 1))
+(global-set-key (kbd "M-f") 'wrap-forward-word)
 #+end_src
 
 "C-c C-d"でcdを呼び出す
