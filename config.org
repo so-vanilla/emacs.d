@@ -1,71 +1,61 @@
 #+Title: Config
 
 * Emacs
-** Settings
-*** Show only filename in title bar
+タイトルをバッファ名のみに
 #+begin_src emacs-lisp
 (setq frame-title-format '("%b"))
 #+end_src
 
-*** Disable bell
+ベルを無効化
 #+begin_src emacs-lisp
 (setq ring-bell-function 'ignore)
 #+end_src
 
-*** Selet file without mouse
+ファイル選択でウィンドウを表示しない様に
 #+begin_src emacs-lisp
 (setq use-file-dialog nil)
 #+end_src
 
-*** yes/no to y/n
+yes-or-no-pの代わりにy-or-n-pを表示
 #+begin_src emacs-lisp
 (setq use-short-answers t)
 #+end_src
 
-*** Open empty buffer when launch
+起動時のタイトル画面表示を抑制し、スクラッチバッファを開くように
 #+begin_src emacs-lisp
 (setq inhibit-splash-screen t
       inhibit-startup-screen t)
 #+end_src
 
-*** Disable buffer menu when open multiple file
+複数ファイルを起動引数に与えたときに、バッファメニューを表示しない様に
 #+begin_src emacs-lisp
 (setq inhibit-startup-buffer-menu t)
 #+end_src
 
-*** Show whitespace on tail
+行末の空白文字を可視化
 #+begin_src emacs-lisp
 (setq show-trailing-whitespace t)
 #+end_src
 
-*** Disable scroll bar
+各種GUIを非表示に
 #+begin_src emacs-lisp
 (scroll-bar-mode -1)
-#+end_src
-
-*** Disable menu bar
-#+begin_src emacs-lisp
 (menu-bar-mode -1)
-#+end_src
-
-*** Disable tool bar
-#+begin_src emacs-lisp
 (tool-bar-mode -1)
 #+end_src
 
-*** Show numbers
+行番号を表示
 #+begin_src emacs-lisp
 (global-display-line-numbers-mode t)
-(setq display-line-numbers-type 'relative)
 #+end_src
 
-*** Highlight text in parenth
+対応する括弧を表示。対応する括弧が画面内に無い場合は括弧内をすべてハイライト
 #+begin_src emacs-lisp
 (show-paren-mode t)
 (setq show-paren-style 'mixed)
 #+end_src
 
-*** Connect to wl-clipboard
+カット、ヤンクをGUIのクリップボードと連携させる
 #+begin_src emacs-lisp
 (setq wl-copy-process nil)
 (defun wl-copy (text)
@@ -79,31 +69,31 @@
 
 (defun wl-paste ()
   (if (and wl-copy-process (process-live-p wl-copy-process))
-    nil
+      nil
     (shell-command-to-string "wl-paste -n | tr -d \\r")))
 
 (setq interprogram-cut-function 'wl-copy)
 (setq interprogram-paste-function 'wl-paste)
 #+end_src
 
-*** Disable backup file
+バックアップファイルの無効化
 #+begin_src emacs-lisp
 (setq make-backup-files nil
       backup-inhibited nil
       create-lockfiles nil)
 #+end_src
 
-*** Tab size
+デフォルトのタブの幅を4に設定
 #+begin_src emacs-lisp
 (setq tab-width 4)
 #+end_src
 
-*** Tab to whitespace
+タブの代わりに空白文字を挿入
 #+begin_src emacs-lisp
 (setq indent-tabs-mode nil)
 #+end_src
 
-*** Font
+フォントをDejaVuに変更
 #+begin_src emacs-lisp
 (set-face-attribute 'default nil
                     :family "DejaVuSansM Nerd Font Mono"
@@ -112,7 +102,7 @@
 		    :width 'normal)
 #+end_src
 
-*** Move window after split
+左右分割なら分割後の右画面、上下分割なら下画面にフォーカスするように変更
 #+begin_src emacs-lisp
 (defun split-window-below-and-switch ()
   (interactive)
@@ -128,35 +118,36 @@
 (global-set-key (kbd "C-x 3") 'split-window-right-and-switch)
 #+end_src
 
-*** Don't show warning in buffer
+デフォルトではelispの計算時,Warning以上で画面を分割して表示
+それをエラー以上に変更
 #+begin_src emacs-lisp
 (setq display-warning-minimum-level :error)
 #+end_src
 
-*** Don't finish mark-mode when use isearch
+"C-SP"Cでの選択時にisearchを使用しても、選択を途切れない様に変更
 #+begin_src emacs-lisp
 (setq isearch-allow-scroll t)
 #+end_src
 
-** Binds
-*** C-h backspace
+"C-"hをヘルプからバックワードに変更
 #+begin_src emacs-lisp
 (global-set-key (kbd "C-h") 'delete-backward-char)
 (keyboard-translate ?\C-h ?\C-?)
 (global-set-key (kbd "C-?") 'help-command)
 #+end_src
 
-*** C-x d cd
+"C-c C-d"でcdを呼び出す
 #+begin_src emacs-lisp
 (global-set-key (kbd "C-x C-d") 'cd)
 #+end_src
 
-*** C-x r ~redo~
+"C-x r"でredoを出来る様に
 #+begin_src emacs-lisp
 (global-set-key (kbd "C-x r") 'undo-redo)
 #+end_src
 
-*** C-a implement
+"C-a"で非空白文字の先頭であるならば、行の先頭へ移動
+それ意外ならば非空白文字の先頭へ移動
 #+begin_src emacs-lisp
 (defun my-move-beginning-of-line ()
   "Move point to first non-whitespace character or beginning-of-line."
@@ -168,8 +159,7 @@
 (global-set-key (kbd "C-a") 'my-move-beginning-of-line)
 #+end_src
 
-** Util functions
-*** Get path to the command
+引数のコマンドのパスを取得する関数
 #+begin_src emacs-lisp
 (defun get-path-to-command (command)
   "Get path to the executable command"
@@ -178,8 +168,7 @@
     (concat "which " command))))
 #+end_src
 
-** Util variables
-*** Completion functions
+LSP非稼動時におけるcapf
 #+begin_src emacs-lisp
 (defvar completion-functions
   '(cape-file
@@ -188,9 +177,35 @@
     yasnippet-capf))
 #+end_src
 
-* use-package
-** Input
-*** ddskk --- Japanese input method
+* パッケージマネージャ
+use-packageの様に使用可能なパッケージマネージャ
+use-packageと比較して予測可能な細かい調整が可能
+** leaf
+**** TODO
+- use-packageのleafへの移行
+- 遅延の調整
+#+begin_src emacs-lisp
+(use-package leaf
+  :ensure t)
+#+end_src
+- repo: [[https:/github.com/conao3/leaf.el]]
+
+** leaf-keyword
+leafのキーワードを追加
+#+begin_src emacs-lisp
+(leaf leaf-keywords
+  :ensure t
+  :config
+  (leaf-keywords-init))
+#+end_src
+- repo: [[https://github.com/conao3/leaf-keywords.el]]
+  
+* 日本語入力
+** ddskk
+日本語入力
+*** TODO
+- skk-modeをglobal-minor-modeに
+- skk-modeをbindから無効に出来無い様に
 #+begin_src emacs-lisp
 (use-package ddskk
   :ensure t
@@ -201,8 +216,13 @@
   :config
   (require 'ccc))
 #+end_src
+- repo: [[https://github.com/skk-dev/ddskk]]
+- doc: [[https://ddskk.readthedocs.io/ja/latest/]]
 
-*** corfu --- Completion frontend
+* 補完
+** corfu
+バッファやミニバッファの補完のフロントエンド
+capfを使用
 #+begin_src emacs-lisp
 (use-package corfu
   :ensure t
@@ -216,16 +236,24 @@
   (define-key corfu-map [return] nil)
   (define-key corfu-map (kbd "RET") nil))
 #+end_src
-
-*** cape --- Completion backend
+- repo: [[https://github.com/minad/corfu]]
+- doc(elpa): [[https://elpa.gnu.org/packages/doc/corfu.html]]
+  
+** cape
+completion-at-point-functionを提供
 #+begin_src emacs-lisp
 (use-package cape
   :ensure t
   :init
   (setq completion-at-point-functions completion-functions))
   #+end_src
+- repo: [[https://github.com/minad/cape]]
+- doc(elpa): [[https://elpa.gnu.org/packages/cape.html]]
 
-*** yasnippet
+* スニペット
+** yasnippet
+スニペットエンジン
+=~/.emacs.d/snippets/= に設定有り
 #+begin_src emacs-lisp
 (use-package yasnippet
   :ensure t
@@ -240,20 +268,34 @@
   :config
   (yas-reload-all)
   :bind
-  (("C-c y n" . yas-next-field)
-   ("C-c y p" . yas-prev-field)))
+  (:map global-map
+	("C-c y n" . yas-next-field)
+	("C-c y p" . yas-prev-field)))
 
+#+end_src
+
+** yasnippet-snippets
+yasnippetのスニペット集
+#+begin_src emacs-lisp
 (use-package yasnippet-snippets
   :ensure t)
+#+end_src
+- repo: https://github.com/AndreaCrotti/yasnippet-snippets
 
+** yasnippet-capf
+yasnippetをcorfuで利用可能なようにcapfへの変換を行う
+#+begin_src emacs-lisp
 (use-package yasnippet-capf
   :ensure t
   :after
   (corfu
    yasnippet))
  #+end_src
+- repo: [[https://github.com/elken/yasnippet-capf]]
 
-*** smartparens --- auto pair
+* 括弧補完
+** smartparens --- auto pair
+括弧補完に加え、対応する括弧の自動削除など
 #+begin_src emacs-lisp
 (use-package smartparens
   :ensure t
@@ -262,131 +304,99 @@
   :config
   (require 'smartparens-config))
 #+end_src
+- repo: [[https://github.com/Fuco1/smartparens]]
+- doc: [[https://smartparens.readthedocs.io/en/latest/]]
 
-** Tree-sitter
-#+begin_src emacs-lisp
-(use-package tree-sitter
-  :ensure t
-  :hook
-  (prog-mode . tree-sitter-mode)
-  :config
-  (global-tree-sitter-mode 1)
-  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
-  
-(use-package tree-sitter-langs
-  :ensure t
-  :after
-  (tree-sitter))
-#+end_src
-
-** Git
-*** magit
+* Gitインタフェース
+** magit
 #+begin_src emacs-lisp
 (use-package magit
   :ensure t)
 #+end_src
+- repo: [[https://github.com/magit/magit]]
+- doc: [[https://magit.vc/]]
 
-** Ivy
-*** ivy
+* ミニバッファ
+** vertico
+ミニバッファへの候補の表示、補完
 #+begin_src emacs-lisp
-(use-package ivy
+(use-package vertico
+  :ensure t
+  :init
+  (vertico-mode))
+#+end_src
+- repo: [[https://github.com/minad/vertico]]
+
+** orderless
+ミニバッファのマッチパターンの調整
+#+begin_src emacs-lisp
+(use-package orderless
   :ensure t
   :custom
-  (ivy-use-virtual-buffer t)
-  (enable-recursive-minibuffers t)
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles basic partial-completion)))))
+#+end_src
+- repo: [[https://github.com/oantolin/orderless]]
+
+** marginalia
+ミニバッファの候補にドキュメントを付与
+#+begin_src emacs-lisp
+(use-package marginalia
+  :ensure t
+  :init
+  (marginalia-mode))
+#+end_src
+- repo: [[https://github.com/minad/marginalia]]
+
+** embark
+ミニバッファのアクションを追加
+#+begin_src emacs-lisp
+(use-package embark
+  :ensure t
   :bind
-  ("C-s" . 'swiper-isearch)
-  ("C-r" . 'swiper-isearch-backward)
-  ("C-/" . 'swiper)
-  ("C-c C-r" . 'ivy-resume)
-  ("<f6>" . 'ivy-resume)
-  ("M-x" . 'counsel-M-x)
-  ("C-x C-f" . 'counsel-find-file)
-  ("C-x b" . 'counsel-switch-buffer)
-  ("<f2> f c" . 'counsel-flycheck)
-  ("<f2> f l" . 'counsel-find-library)
-  ("<f2> d f" . 'counsel-describe-function)
-  ("<f2> d v" . 'counsel-describe-variable)
-  ("<f2> d s" . 'counsel-describe-symbol)
-  ("<f2> u c" . 'counsel-unicode-char)
-  ("<f2> g i t" . 'counsel-git)
-  ("<f2> g g" . 'counsel-git-grep)
-  ("<f2> g c w" . 'counsel-git-change-worktree)
-  ("<f2> g c o" . 'counsel-git-checkout)
-  ("<f2> g s" . 'counsel-git-stash)
-  ("<f2> g l" . 'counsel-git-log)
-  ("<f2> o g t" . 'counsel-org-goto)
-  ("<f2> o g a" . 'counsel-org-goto-all)
-  ("<f2> o t t" . 'counsel-org-tag)
-  ("<f2> o t a" . 'counsel-org-tag-agenda)
-  ("<f2> o a h" . 'counsel-org-agenda-headlines)
-  ("<f2> o l" . 'counsel-org-link)
-  ("<f2> o f" . 'counsel-org-file)
-  ("<f2> o c" . 'counsel-org-capture)
-  ("<f2> o e" . 'counsel-org-entity)
-  ("<f2> l w s" . 'lsp-ivy-workspace-symbol)
-  ("<f2> l g s" . 'lsp-ivy-global-workspace-symbol)
-  :config
-  (ivy-mode 1)
-  (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
+  (:map global-map
+	([remap isearch-forward] . embark-isearch-forward)
+	([remap isearch-backward] . embark-isearch-backward)))
 #+end_src
+- repo: [[https://github.com/oantolin/embark]]
 
-*** counsel
+** embark-consult
 #+begin_src emacs-lisp
-(use-package counsel
+(use-package embark-consult
   :ensure t
-  :after
-  (ivy)
-  :config
-  (counsel-mode 1))
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
 #+end_src
+- repo: [[https://github.com/emacs-straight/embark-consult]]
 
-*** swiper
+** consult
+組込み関数の拡張、その他便利な関数の追加
 #+begin_src emacs-lisp
-(use-package swiper
+(use-package consult
   :ensure t
-  :after
-  (ivy))
+  :bind
+  (:map global-map
+	([remap switch-to-buffer] . consult-buffer)
+	([remap imenu] . consult-imenu)
+	("C-/" . consult-line)))
 #+end_src
+- repo: [[https://github.com/minad/consult]]
 
-*** lsp-ivy
-#+begin_src emacs-lisp
-(use-package lsp-ivy
-  :ensure t
-  :after
-  (ivy))
-#+end_src
-
-*** ivy-rich
-#+begin_src emacs-lisp
-(use-package ivy-rich
-  :ensure t
-  :after
-  (ivy)
-  :config
-  (ivy-rich-mode 1))
-
-(use-package all-the-icons-ivy-rich
-  :ensure t
-  :after
-  (ivy)
-  :config
-  (all-the-icons-ivy-rich-mode 1))
-#+end_src
-
-** File tree
-*** neotree
+* File tree
+** neotree
 #+begin_src emacs-lisp
 (use-package neotree
   :ensure t
   :bind
-  (("<f5>" . neotree-toggle))
+  (:map global-map
+	("<f5>" . neotree-toggle))
   :custom
   (neo-theme (if (display-graphic-p) 'icons 'arrow)))
 #+end_src
+- repo: [[https://github.com/jaypei/emacs-neotree]]
 
-** UI
-*** org-modern
+* UI
+** org-modern
 #+begin_src emacs-lisp
 (use-package org-modern
   :ensure t
@@ -402,16 +412,16 @@
   (org-agenda-tags-column 0)
   (org-agenda-block-separator ?─)
   (org-agenda-time-grid
-    '((daily today require-timed)
-      (800 1000 1200 1400 1600 1800 2000)
-      " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
-      org-agenda-current-time-string
-      "◀── now ─────────────────────────────────────────────────"))
+   '((daily today require-timed)
+     (800 1000 1200 1400 1600 1800 2000)
+     " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+   org-agenda-current-time-string
+   "◀── now ─────────────────────────────────────────────────"))
 
 (with-eval-after-load 'org (global-org-modern-mode))
 #+end_src
 
-*** pdf-tools
+** pdf-tools
 #+begin_src emacs-lisp
 (use-package pdf-tools
   :ensure t
@@ -423,8 +433,8 @@
 (add-to-list 'auto-mode-alist '("\\.pdf\\'" . pdf-view-mode))
 #+end_src
 
-** Shell
-*** vterm
+* Shell
+** vterm
 #+begin_src emacs-lisp
 (use-package vterm
   :ensure t
@@ -435,8 +445,8 @@
 		   (local-set-key (kbd "C-h") 'vterm-send-backspace)))))
 #+end_src
 
-** Language settings
-*** c
+* Language settings
+** c
 #+begin_src emacs-lisp
 (use-package cc-mode
   :ensure t
@@ -445,39 +455,22 @@
    ("\\.h\\'" . c-mode)
    ("\\.cpp\\'" . c++-mode)
    ("\\.hpp\\'" . c++-mode))
-  :hook
-  ((c-mode . lsp-deferred)
-   (c++-mode . lsp-deferred)
-   (c-mode . (lambda ()
-	       (setq-local completion-at-point-functions (append completion-functions '(lsp-completion-at-point)))))  
-   (c++-mode . (lambda ()
-		 (setq-local completion-at-point-functions (append completion-functions '(lsp-completion-at-point))))))
   :custom
   (c-default-style "k&r")
   (c-basic-offset 4))
 #+end_src
 
-*** clojure
+** clojure
 #+begin_src emacs-lisp
 (use-package clojure-mode
   :ensure t
   :mode
   (("\\.clj\\'" . clojure-mode)
    ("\\.cljs\\'" . clojurescript-mode)
-   ("\\.cljc\\'" . clojurec-mode))
-  :hook
-  ((clojure-mode . lsp-deferred)
-   (clojure-mode . (lambda ()
-		     (setq-local completion-at-point-functions (append completion-functions '(lsp-completion-at-point)))))
-   (clojurescript-mode . lsp-deferred)
-   (clojurescript-mode . (lambda ()
-			   (setq-local completion-at-point-functions (append completion-functions '(lsp-completion-at-point)))))
-   (clojurec-mode . lsp-deferred)
-   (clojurec-mode . (lambda ()
-		      (setq-local completion-at-point-functions (append completion-functions '(lsp-completion-at-point)))))))
+   ("\\.cljc\\'" . clojurec-mode)))
 #+end_src
 
-*** clojure with org babel
+** clojure with org babel
 #+begin_src emacs-lisp
 (use-package cider
   :ensure t)
@@ -486,62 +479,28 @@
 (setq cider-repl-pop-to-buffer-on-connect nil)
 #+end_src
 
-*** java
-#+begin_src emacs-lisp
-(use-package lsp-java
-  :ensure t
-  :hook
-  ((java-mode . lsp-deffered)
-   (java-mode . (lambda ()
-		  (require 'lsp-java)
-		  (lsp)))
-   (java-mode . (lambda ()
-		  (setq-local completion-at-point-functions (append completion-functions '(lsp-completion-at-point)))))))
-
-()
-#+end_src
-
-*** nix
+** nix
 #+begin_src emacs-lisp
 (use-package nix-mode
   :ensure t
   :mode
-  ("\\.nix\\'")
-  :hook
-  ((nix-mode . lsp-deferred)
-   (nix-mode . (lambda ()
-		 (setq-local completion-at-point-functions (append completion-functions '(lsp-completion-at-point)))))))
+  ("\\.nix\\'" . nix-mode))
 #+end_src
 
-*** python
+** python
 #+begin_src emacs-lisp
 (use-package python-mode
   :ensure t
   :mode
-  ("\\.py\\'")
-  :hook
-  ((python-mode . lsp-deferred)
-   (python-mode . (lambda ()
-		    (setq-local completion-at-point-functions (append completion-functions '(lsp-completion-at-point)))))))
-
-(use-package lsp-pyright
-  :ensure t
-  :hook
-  (python-mode . (lambda ()
-		   (require 'lsp-pyright)
-		   (lsp))))
+  ("\\.py\\'" . python-mode))
 #+end_src
 
-*** rust
+** rust
 #+begin_src emacs-lisp
 (use-package rust-mode
   :ensure t
   :mode
   ("\\.rs\\'")
-  :hook
-  ((rust-mode . lsp-deferred)
-   (rust-mode . (lambda ()
-		  (setq-local completion-at-point-functions (append completion-functions '(lsp-completion-at-point))))))
   :custom
   (rust-mode-tree-sitter-derive t))
 
@@ -550,81 +509,71 @@
   :after
   (rust-mode)
   :custom
+  (rustic-lsp-client 'eglot)
   (rustic-format-on-save t)
   (rustic-cargo-use-last-stored-auguments t))
-
-(use-package flycheck-rust
-  :ensure t
-  :after
-  (rust-mode)
-  :config
-  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
 (use-package cargo
   :ensure t)
 #+end_src
 
-** LSP
-*** lsp-mode --- LSP client
+* LSP
+** eglot
 #+begin_src emacs-lisp
-(use-package lsp-mode
-  :ensure t
-  :commands
-  (lsp)
+(use-package eglot
+  :ensure nil ;; built-in
   :hook
-  ((lsp-mode . lsp-enable-which-key-integration))
+  ((bash-ts-mode . eglot-ensure)
+   (c-mode . eglot-ensure)
+   (c-ts-mode . eglot-ensure)
+   (clojure-mode . eglot-ensure)
+   (go-ts-mode . eglot-ensure)
+   (markdown-mode . eglot-ensure)
+   (java-mode . eglot-ensure)
+   (java-ts-mode . eglot-ensure)
+   (js-mode . eglot-ensure)
+   (latex-mode . eglot-ensure)
+   (nix-mode . eglot-ensure)
+   (python-mode . eglot-ensure)
+   (python-ts-mode . eglot-ensure)
+   (rust-mode . eglot-ensure)
+   (rust-ts-mode .  eglot-ensure)
+   (typescript-ts-mode . eglot-ensure))
   :custom
-  (lsp-keymap-prefix "C-c l")
-  (lsp-enable-file-watchers nil)
-  (lsp-enable-completion-at-point nil)
-  (lsp-enable-symbol-highlighting nil)
-  (lsp-modeline-diagnostics-enable t)
-  (lsp-completion-provider :capf)
-  (lsp-diagnostics-provider :flycheck)
-  (lsp-clangd-binary-path (get-path-to-command "clangd"))
-  (lsp-clojure-server-store-path (get-path-to-command "clojure-lsp"))
-  (lsp-nix-nil-server-path (get-path-to-command "nil")))
-#+end_src
-
-*** lsp-ui --- Integration UI
-#+begin_src emacs-lisp
-(use-package lsp-ui
-  :ensure t
-  :hook
-  (lsp-mode)
-  :custom
-  (lsp-ui-sideline-enable t)
-  (lsp-ui-sideline-show-diagnostics t)
-  (lsp-ui-sideline-show-hover t)
-  (lsp-ui-sideline-show-code-actions t)
-  (lsp-ui-sideline-update-mode nil)
-  (lsp-ui-peek-enable t)
-  (lsp-ui-peek-show-directory t)
-  (lsp-ui-doc-enable t)
-  (lsp-ui-doc-position 'at-point)  
-  :bind
-  (([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
-   ([remap xref-find-references] . lsp-ui-peek-find-references)
-   ("C-c i" . lsp-ui-imenu)
-   ("C-c d s" . lsp-ui-doc-show)
-   ("C-c d h" . lsp-ui-doc-hide)))
-#+end_src
-
-*** flycheck --- Show Error and diagnostic
-#+begin_src emacs-lisp
-(use-package flycheck
-  :ensure t
-  :hook
-  (lsp-mode)
+  (eglot-autoshutdown t)
+  (eglot-confirm-server-initiated-edits nil)
   :config
-  (add-hook 'after-init-hook #'global-flycheck-mode)
-  :bind
-  (("M-n" . flycheck-next-error)
-   ("M-p" . flycheck-previous-error)))
+  (add-to-list 'eglot-server-programs
+	       '(nix-mode . ("nil")))
+  (add-to-list 'eglot-server-programs
+	       '(js-mode . ("deno" "lsp")))
+  (add-to-list 'eglot-server-programs
+	       '(js-ts-mode . ("deno" "lsp")))
+  (add-to-list 'eglot-server-programs
+	       '(typescript-ts-mode . ("deno" "lsp"))))
+   #+end_src
+
+** eglot-booster
+#+begin_src emacs-lisp
+(use-package eglot-booster
+  :after eglot
+  :config
+  (eglot-booster-mode))
 #+end_src
 
-** Org
-*** org
+* Error/Diagnositcs
+** flymake
+#+begin_src emacs-lisp
+(use-package flymake
+  :ensure nil ;;built-in
+  :bind
+  (:map global-map
+	("M-n" . flymake-goto-next-error)
+	("M-p" . flymake-goto-prev-error)))
+#+end_src
+
+* Org
+** org
 #+begin_src emacs-lisp
 (use-package org
   :ensure nil ;; built-in
@@ -646,10 +595,16 @@
   (org-use-speed-commands t)
   (org-directory "~/org")
   :bind
-  (("C-c a" . 'org-agenda)))
+  (:map global-map
+	("C-c a" . 'org-agenda)
+	:map org-mode-map
+	("C-c f h e" . 'org-fold-hide-entry)
+	("C-c f h a" . 'org-fold-hide-block-all)
+	("C-c f s e" . 'org-fold-show-entry)
+	("C-c f s a" . 'org-fold-show-all)))
 #+end_src
 
-*** org-agenda
+** org-agenda
 #+begin_src emacs-lisp
 (use-package org-agenda
   :ensure nil ;; built-in
@@ -657,15 +612,14 @@
   (org
    tramp)
   :custom
-  ;; agenda
-  (org-agenda-files '("~/org/todo.org" "~/org/schedule.org" "~/org/caldav.org"))
+  (org-agenda-files '("~/org/general.org"))
   (org-agenda-span 'day)
   (org-agenda-skip-deadline-if-done nil)
   (org-agenda-skip-scheduled-if-done nil)
   (org-agenda-skip-deadline-prewarning-if-scheduled nil))
 #+end_src
 
-*** org-super-agenda
+** org-super-agenda
 #+begin_src emacs-lisp
 (use-package org-super-agenda
   :ensure t
@@ -679,23 +633,36 @@
             :priority "A")
      (:order-multi (2 (:name "Shopping in town"
                              :and (:tag "shopping" :tag "@town"))
-                      (:name "Food-related"
+		      (:name "Food-related"
                              :tag ("food" "dinner"))
-                      (:name "Personal"
+		      (:name "Personal"
                              :habit t
                              :tag "personal")
-                      (:name "Space-related (non-moon-or-planet-related)"
+		      (:name "Space-related (non-moon-or-planet-related)"
                              :and (:regexp ("space" "NASA")
                                            :not (:regexp "moon" :tag "planet")))))
      (:todo "WAITING" :order 8)  ; Set order of this section
      (:todo ("SOMEDAY" "TO-READ" "CHECK" "TO-WATCH" "WATCHING")
             :order 9)
-     (:priority<= "B" :order 1)))
-  :config
-  (org-agenda nil "a"))  
+     (:priority<= "B" :order 1))))
+     #+end_src
+
+** org-capture
+#+begin_src emacs-lisp
+(use-package org-super-agenda
+  :ensure nil ;; built-in
+  :custom
+  (org-capture-templates
+   '(("t" "Todo" entry (file "~/org/general.org")
+      "* TODO %?\n")
+     ("s" "Schedule" entry (file "~/org/general.org")
+      "* %?\n")))
+  :bind
+  (:map global-map
+	("C-c c" . 'org-capture)))
 #+end_src
 
-*** org-jorunal
+** org-jorunal
 #+begin_src emacs-lisp
 (use-package org-journal
   :ensure t
@@ -706,7 +673,7 @@
   (org-journal-file-format "%Y-%m-%d.org"))
 #+end_src
 
-*** org-roam
+** org-roam
 #+begin_src emacs-lisp
 (use-package org-roam
   :ensure t
@@ -718,28 +685,29 @@
 		 (local-set-key (kbd "C-c r a r") 'org-roam-alias-remove)
 		 (local-set-key (kbd "C-c r n i") 'org-roam-node-insert))))
   :bind
-  (("C-c r n f" . org-roam-node-find)
-   ("C-c r d t" . org-roam-dailies-capture-today))
+  (:map global-map
+	("C-c r n f" . org-roam-node-find)
+	("C-c r d t" . org-roam-dailies-capture-today))
   :custom
   (org-roam-directory (file-truename "~/org/org-roam"))
   :config
   (org-roam-db-autosync-mode 1))
 #+end_src
 
-*** org-caldav
+** org-caldav
 #+begin_src emacs-lisp
 (use-package org-caldav
   :ensure t
   :custom
   (org-caldav-url "https://webmail.gandi.net/SOGo/dav/somura-vanilla@so-icecream.com/Calendar")
   (org-caldav-calendar-id "personal")
-  (org-caldav-inbox "~/org/caldav.org")
+  (org-caldav-inbox "~/org/general.org")
   (org-icalendar-timezone "Asia/Tokyo")
   (org-icalendar-include-todo 'all)
   (org-caldav-sync-todo t))
 #+end_src
 
-*** org-babel
+** org-babel
 #+begin_src emacs-lisp
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -748,7 +716,7 @@
    (shell . t)))
 #+end_src
 
-*** org to latex
+** org to latex
 #+begin_src emacs-lisp
 (use-package ox-latex
   :ensure nil ;; included org
@@ -800,15 +768,15 @@
   (ox-latex)  )
 #+end_src
 
-*** tramp --- for webdav
+** tramp --- for webdav
 #+begin_src emacs-lisp
 (use-package tramp
   :ensure nil ;; built-in
   :defer t)
 #+end_src
 
-** EWW
-*** eww
+* EWW
+** eww
 #+begin_src emacs-lisp
 (use-package eww
   :ensure nil ;; built-in
@@ -832,7 +800,7 @@
   (define-key eww-mode-map (kbd "B") 'eww-browse-with-external-browser))
 #+end_src
 
-*** dom
+** dom
 #+begin_src emacs-lisp
 (use-package dom
   :ensure nil ;; built-in
@@ -840,7 +808,7 @@
   (eww))
 #+end_src
 
-*** shr
+** shr
 #+begin_src emacs-lisp
 (use-package shr
   :ensure nil ;; built-in
@@ -851,7 +819,7 @@
   (shr-bullet "• "))
 #+end_src
 
-*** eww-lnum
+** eww-lnum
 #+begin_src emacs-lisp
 (use-package eww-lnum
   :ensure t
@@ -862,8 +830,8 @@
   (define-key eww-mode-map (kbd "F") 'eww-lnum-universal))
 #+end_src
 
-** Theme
-*** catppuccin-theme
+* Theme
+** catppuccin-theme
 #+begin_src emacs-lisp
 (use-package catppuccin-theme
   :ensure t
@@ -873,7 +841,7 @@
 (load-theme 'catppuccin :no-conform)
 #+end_src
 
-*** doom-modeline
+** doom-modeline
 #+begin_src emacs-lisp
 (use-package doom-modeline
   :ensure t
@@ -881,7 +849,7 @@
   (doom-modeline-mode 1))
 #+end_src
 
-*** nyan-mode
+** nyan-mode
 #+begin_src emacs-lisp
 (use-package nyan-mode
   :ensure t
@@ -896,7 +864,7 @@
   (nyan-mode 1))
 #+end_src
 
-*** parrot
+** parrot
 #+begin_src emacs-lisp
 (use-package parrot
   :ensure t
@@ -906,19 +874,19 @@
   (parrot-mode 1))
 #+end_src
 
-*** all-the-icons
+** all-the-icons
 #+begin_src emacs-lisp
 (use-package all-the-icons
   :ensure t)
 #+end_src
 
-*** nerd-icons
+** nerd-icons
 #+begin_src emacs-lisp
 (use-package nerd-icons
   :ensure t)
 #+end_src
 
-*** kind-icon
+** kind-icon
 #+begin_src emacs-lisp
 (use-package kind-icon
   :ensure t
@@ -927,8 +895,8 @@
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 #+end_src
 
-** Others
-*** emacs-direnv
+* Others
+** emacs-direnv
 #+begin_src emacs-lisp
 (use-package direnv
   :ensure t

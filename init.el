@@ -26,7 +26,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(org-super-agenda yasnippet-snippets direnv org-caldav cider all-the-icons-ivy-rich ivy-rich kind-icon pdf-tools yasnippet lsp-java org-roam org-journal eww-lnum random-splash-image vterm doom-modeline parrot flycheck-rust all-the-icons neotree treemacs-magit treemacs-icons-dired treemacs-projectile treemacs nerd-icons nix-mode rustic cargo rust-mode T tree-sitter-langs tree-sitter magit lsp-ivy counsel ivy nyan-mode spaceline smartparens python-mode lsp-ui flycheck ddskk corfu catppuccin-theme cape)))
+   '(eglot eglot-booster direnv kind-icon all-the-icons parrot nyan-mode doom-modeline catppuccin-theme eww-lnum org-caldav org-roam org-journal org-super-agenda cargo rustic rust-mode python-mode nix-mode cider clojure-mode vterm pdf-tools org-modern neotree embark-consult embark marginalia orderless vertico magit smartparens yasnippet-capf yasnippet-snippets yasnippet cape corfu ddskk leaf-keywords leaf T))
+ '(package-vc-selected-packages
+   '((eglot-booster :vc-backend Git :url "https://github.com/jdtsmith/eglot-booster"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
