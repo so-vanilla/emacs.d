@@ -685,7 +685,10 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   (org)
   :custom
   (org-journal-dir "~/org/journal/")
-  (org-journal-file-format "%Y-%m-%d.org"))
+  (org-journal-file-format "%Y-%m-%d.org")
+  :bind
+  (:map global-map
+	("C-c C-j n e" . org-journal-new-entry)))
 #+end_src
 
 ** org-roam
