@@ -679,7 +679,7 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   (org-journal-file-format "%Y-%m-%d.org")
   :bind
   (:map global-map
-	("C-c C-j n e" . org-journal-new-entry)))
+	("C-c j n e" . org-journal-new-entry)))
 #+end_src
 
 ** org-roam
@@ -688,15 +688,15 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   :ensure t
   :hook
   ((org-mode . (lambda ()
-		 (local-set-key (kbd "C-c C-r t a") 'org-roam-tag-add)
-		 (local-set-key (kbd "C-c C-r t r") 'org-roam-tag-remove)
-		 (local-set-key (kbd "C-c C-r a a") 'org-roam-alias-add)
-		 (local-set-key (kbd "C-c C-r a r") 'org-roam-alias-remove)
-		 (local-set-key (kbd "C-c C-r n i") 'org-roam-node-insert))))
+		 (local-set-key (kbd "C-c r t a") 'org-roam-tag-add)
+		 (local-set-key (kbd "C-c r t r") 'org-roam-tag-remove)
+		 (local-set-key (kbd "C-c r a a") 'org-roam-alias-add)
+		 (local-set-key (kbd "C-c r a r") 'org-roam-alias-remove)
+		 (local-set-key (kbd "C-c r n i") 'org-roam-node-insert))))
   :bind
   (:map global-map
-	("C-c C-r n f" . org-roam-node-find)
-	("C-c C-r d t" . org-roam-dailies-capture-today))
+	("C-c r n f" . org-roam-node-find)
+	("C-c r d t" . org-roam-dailies-capture-today))
   :custom
   (org-roam-directory (file-truename "~/org/org-roam"))
   :config
