@@ -386,8 +386,13 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   :bind
   (:map global-map
 	([remap switch-to-buffer] . consult-buffer)
+	("C-x C-b" . consult-buffer-other-window)
 	([remap imenu] . consult-imenu)
-	("C-/" . consult-line)))
+	("C-/" . consult-line)
+	([remap goto-line] . consult-goto-line)
+	("<f2> o l" . consult-outline)
+	("<f2> f m" . consult-flymake)
+	("<f2> r g" . consult-ripgrep)))
 #+end_src
 - repo: [[https://github.com/minad/consult]]
 
