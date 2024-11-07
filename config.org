@@ -365,7 +365,8 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   :bind
   (:map global-map
 	([remap isearch-forward] . embark-isearch-forward)
-	([remap isearch-backward] . embark-isearch-backward)))
+	([remap isearch-backward] . embark-isearch-backward)
+	("C-." . embark-act)))
 #+end_src
 - repo: [[https://github.com/oantolin/embark]]
 
