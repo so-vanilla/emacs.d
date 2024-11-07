@@ -590,23 +590,24 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 * Org
 ** org
 #+begin_src emacs-lisp
-(use-package org
-  :ensure nil ;; built-in
-  (org-mode . (lambda ()
-		(setq-local completion-at-point-functions (append completion-functions '(cape-elisp-block cape-elisp-symbol)))))
-  :custom
-  (org-src-preserve-indentation nil)
-  (org-edit-src-content-indentation 0)
-  (org-use-speed-commands t)
-  (org-directory "~/org")
-  :bind
-  (:map global-map
-	("C-c a" . 'org-agenda)
-	:map org-mode-map
-	("C-c C-f h e" . 'org-fold-hide-entry)
-	("C-c C-f h a" . 'org-fold-hide-block-all)
-	("C-c C-f s e" . 'org-fold-show-entry)
-	("C-c C-f s a" . 'org-fold-show-all)))
+  (use-package org
+    :ensure nil ;; built-in
+    :hook
+    (org-mode . (lambda ()
+		  (setq-local completion-at-point-functions (append completion-functions '(cape-elisp-block cape-elisp-symbol)))))
+    :custom
+    (org-src-preserve-indentation nil)
+    (org-edit-src-content-indentation 0)
+    (org-use-speed-commands t)
+    (org-directory "~/org")
+    :bind
+    (:map global-map
+	  ("C-c a" . 'org-agenda)
+	  :map org-mode-map
+	  ("C-c f h e" . 'org-fold-hide-entry)
+	  ("C-c f h a" . 'org-fold-hide-block-all)
+	  ("C-c f s e" . 'org-fold-show-entry)
+	  ("C-c f s a" . 'org-fold-show-all)))
 #+end_src
 
 ** org-agenda
