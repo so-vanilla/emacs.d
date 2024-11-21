@@ -186,35 +186,9 @@ LSP非稼動時におけるcapf
     yasnippet-capf))
 #+end_src
 
-* パッケージマネージャ
-use-packageの様に使用可能なパッケージマネージャ
-use-packageと比較して予測可能な細かい調整が可能
-** leaf
-**** TODO
-- use-packageのleafへの移行
-- 遅延の調整
-#+begin_src emacs-lisp
-(use-package leaf
-  :ensure t)
-#+end_src
-- repo: [[https:/github.com/conao3/leaf.el]]
-
-** leaf-keyword
-leafのキーワードを追加
-#+begin_src emacs-lisp
-(leaf leaf-keywords
-  :ensure t
-  :config
-  (leaf-keywords-init))
-#+end_src
-- repo: [[https://github.com/conao3/leaf-keywords.el]]
-  
 * 日本語入力
 ** ddskk
 日本語入力
-*** TODO
-- skk-modeをglobal-minor-modeに
-- skk-modeをbindから無効に出来無い様に
 #+begin_src emacs-lisp
 (use-package ddskk
   :ensure t
@@ -225,8 +199,8 @@ leafのキーワードを追加
   :config
   (require 'ccc))
 #+end_src
-- repo: [[https://github.com/skk-dev/ddskk]]
-- doc: [[https://ddskk.readthedocs.io/ja/latest/]]
+- repo :: [[https://github.com/skk-dev/ddskk]]
+- doc :: [[https://ddskk.readthedocs.io/ja/latest/]]
 
 * 補完
 ** corfu
@@ -245,8 +219,8 @@ capfを使用
   (define-key corfu-map [return] nil)
   (define-key corfu-map (kbd "RET") nil))
 #+end_src
-- repo: [[https://github.com/minad/corfu]]
-- doc(elpa): [[https://elpa.gnu.org/packages/doc/corfu.html]]
+- repo :: [[https://github.com/minad/corfu]]
+- doc(elpa) :: [[https://elpa.gnu.org/packages/doc/corfu.html]]
   
 ** cape
 completion-at-point-functionを提供
@@ -256,8 +230,8 @@ completion-at-point-functionを提供
   :init
   (setq completion-at-point-functions completion-functions))
   #+end_src
-- repo: [[https://github.com/minad/cape]]
-- doc(elpa): [[https://elpa.gnu.org/packages/cape.html]]
+- repo :: [[https://github.com/minad/cape]]
+- doc(elpa) :: [[https://elpa.gnu.org/packages/cape.html]]
 
 * スニペット
 ** yasnippet
@@ -278,8 +252,8 @@ completion-at-point-functionを提供
   (yas-reload-all)
   :bind
   (:map global-map
-	("M-[" . yas-next-field)
-	("M-]" . yas-prev-field)))
+	("M-]" . yas-next-field)
+	("M-[" . yas-prev-field)))
 
 #+end_src
 
@@ -289,7 +263,7 @@ yasnippetのスニペット集
 (use-package yasnippet-snippets
   :ensure t)
 #+end_src
-- repo: https://github.com/AndreaCrotti/yasnippet-snippets
+- repo :: https://github.com/AndreaCrotti/yasnippet-snippets
 
 ** yasnippet-capf
 yasnippetをcorfuで利用可能なようにcapfへの変換を行う
@@ -300,7 +274,7 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   (corfu
    yasnippet))
  #+end_src
-- repo: [[https://github.com/elken/yasnippet-capf]]
+- repo :: [[https://github.com/elken/yasnippet-capf]]
 
 * 括弧補完
 ** smartparens --- auto pair
@@ -313,8 +287,8 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   :config
   (require 'smartparens-config))
 #+end_src
-- repo: [[https://github.com/Fuco1/smartparens]]
-- doc: [[https://smartparens.readthedocs.io/en/latest/]]
+- repo :: [[https://github.com/Fuco1/smartparens]]
+- doc :: [[https://smartparens.readthedocs.io/en/latest/]]
 
 * Gitインタフェース
 ** magit
@@ -322,8 +296,8 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 (use-package magit
   :ensure t)
 #+end_src
-- repo: [[https://github.com/magit/magit]]
-- doc: [[https://magit.vc/]]
+- repo :: [[https://github.com/magit/magit]]
+- doc :: [[https://magit.vc/]]
 
 * ミニバッファ
 ** vertico
@@ -334,7 +308,7 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   :init
   (vertico-mode))
 #+end_src
-- repo: [[https://github.com/minad/vertico]]
+- repo :: [[https://github.com/minad/vertico]]
 
 ** orderless
 ミニバッファのマッチパターンの調整
@@ -345,7 +319,7 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   (completion-styles '(orderless basic))
   (completion-category-overrides '((file (styles basic partial-completion)))))
 #+end_src
-- repo: [[https://github.com/oantolin/orderless]]
+- repo :: [[https://github.com/oantolin/orderless]]
 
 ** marginalia
 ミニバッファの候補にドキュメントを付与
@@ -355,7 +329,7 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   :init
   (marginalia-mode))
 #+end_src
-- repo: [[https://github.com/minad/marginalia]]
+- repo :: [[https://github.com/minad/marginalia]]
 
 ** embark
 ミニバッファのアクションを追加
@@ -368,7 +342,7 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 	([remap isearch-backward] . embark-isearch-backward)
 	("C-." . embark-act)))
 #+end_src
-- repo: [[https://github.com/oantolin/embark]]
+- repo :: [[https://github.com/oantolin/embark]]
 
 ** embark-consult
 #+begin_src emacs-lisp
@@ -377,7 +351,7 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 #+end_src
-- repo: [[https://github.com/emacs-straight/embark-consult]]
+- repo :: [[https://github.com/emacs-straight/embark-consult]]
 
 ** consult
 組込み関数の拡張、その他便利な関数の追加
@@ -395,10 +369,11 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 	("<f2> f m" . consult-flymake)
 	("<f2> r g" . consult-ripgrep)))
 #+end_src
-- repo: [[https://github.com/minad/consult]]
+- repo :: [[https://github.com/minad/consult]]
 
-* File tree
+* ファイルツリー
 ** neotree
+ファイルツリーの表示
 #+begin_src emacs-lisp
 (use-package neotree
   :ensure t
@@ -408,35 +383,11 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   :custom
   (neo-theme (if (display-graphic-p) 'icons 'arrow)))
 #+end_src
-- repo: [[https://github.com/jaypei/emacs-neotree]]
+- repo :: [[https://github.com/jaypei/emacs-neotree]]
 
-* UI
-** org-modern
-#+begin_src emacs-lisp
-(use-package org-modern
-  :ensure t
-  :custom
-  (org-auto-align-tags nil)
-  (org-tags-column 0)
-  (org-fold-catch-invisible-edits 'show-and-error)
-  (org-special-ctrl-a/e t)
-  (org-insert-heading-respect-content t)
-  (org-hide-emphasis-markers t)
-  (org-pretty-entities t)
-  (org-ellipsis "…")
-  (org-agenda-tags-column 0)
-  (org-agenda-block-separator ?─)
-  (org-agenda-time-grid
-   '((daily today require-timed)
-     (800 1000 1200 1400 1600 1800 2000)
-     " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
-   org-agenda-current-time-string
-   "◀── now ─────────────────────────────────────────────────"))
-
-(with-eval-after-load 'org (global-org-modern-mode))
-#+end_src
-
+* PDF
 ** pdf-tools
+バッファへのPDFの表示
 #+begin_src emacs-lisp
 (use-package pdf-tools
   :ensure t
@@ -447,9 +398,11 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 
 (add-to-list 'auto-mode-alist '("\\.pdf\\'" . pdf-view-mode))
 #+end_src
+- repo :: [[https://github.com/vedang/pdf-tools]]
 
-* Shell
+* ターミナル
 ** vterm
+ターミナル
 #+begin_src emacs-lisp
 (use-package vterm
   :ensure t
@@ -459,12 +412,13 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   ((vterm-mode . (lambda ()
 		   (local-set-key (kbd "C-h") 'vterm-send-backspace)))))
 #+end_src
+- repo :: [[https://github.com/akermu/emacs-libvterm]]
 
 * Language settings
 ** c
 #+begin_src emacs-lisp
 (use-package cc-mode
-  :ensure t
+  :ensure nil ;; built-in
   :mode
   (("\\.c\\'" . c-mode)
    ("\\.h\\'" . c-mode)
@@ -474,6 +428,7 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   (c-default-style "k&r")
   (c-basic-offset 4))
 #+end_src
+- doc :: [[https://www.gnu.org/software/emacs/manual/html_mono/ccmode.html]]
 
 ** clojure
 #+begin_src emacs-lisp
@@ -484,8 +439,10 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
    ("\\.cljs\\'" . clojurescript-mode)
    ("\\.cljc\\'" . clojurec-mode)))
 #+end_src
+- repo :: [[https://github.com/clojure-emacs/clojure-mode/]]
 
-** clojure with org babel
+** clojure repl
+clojureのREPL及びorg-babelでのclojureの実行のための設定
 #+begin_src emacs-lisp
 (use-package cider
   :ensure t)
@@ -493,6 +450,8 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 (setq org-babel-clojure-backend 'cider)
 (setq cider-repl-pop-to-buffer-on-connect nil)
 #+end_src
+- repo :: [[https://github.com/clojure-emacs/cider]]
+- HP :: [[https://cider.mx/]]
 
 ** nix
 #+begin_src emacs-lisp
@@ -501,6 +460,7 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   :mode
   ("\\.nix\\'" . nix-mode))
 #+end_src
+- repo :: https://github.com/NixOS/nix-mode
 
 ** python
 #+begin_src emacs-lisp
@@ -509,6 +469,7 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   :mode
   ("\\.py\\'" . python-mode))
 #+end_src
+- repo :: [[https://github.com/emacsmirror/python-mode]]
 
 ** rust
 #+begin_src emacs-lisp
@@ -518,7 +479,9 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   ("\\.rs\\'")
   :custom
   (rust-mode-tree-sitter-derive t))
-
+#+end_src
+rust-modeの拡張
+#+begin_src emacs-lisp
 (use-package rustic
   :ensure t
   :after
@@ -527,7 +490,9 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   (rustic-lsp-client 'eglot)
   (rustic-format-on-save t)
   (rustic-cargo-use-last-stored-auguments t))
-
+#+end_src
+cargoのインタフェース
+#+begin_src emacs-lisp
 (use-package cargo
   :ensure t)
 #+end_src
@@ -567,6 +532,8 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   (add-to-list 'eglot-server-programs
 	       '(typescript-ts-mode . ("deno" "lsp"))))
    #+end_src
+- repo :: [[https://github.com/joaotavora/eglot]]
+- doc :: [[https://www.gnu.org/software/emacs/manual/html_node/eglot/index.html]]
 
 ** eglot-booster
 #+begin_src emacs-lisp
@@ -575,6 +542,7 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   :config
   (eglot-booster-mode))
 #+end_src
+- repo :: https://github.com/jdtsmith/eglot-booster
 
 * Error/Diagnositcs
 ** flymake
@@ -586,9 +554,11 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 	("M-n" . flymake-goto-next-error)
 	("M-p" . flymake-goto-prev-error)))
 #+end_src
+- doc :: [[https://www.gnu.org/software/emacs/manual/html_mono/flymake.html]]
 
 * Org
 ** org
+コア
 #+begin_src emacs-lisp
   (use-package org
     :ensure nil ;; built-in
@@ -609,8 +579,10 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 	  ("C-c f s e" . 'org-fold-show-entry)
 	  ("C-c f s a" . 'org-fold-show-all)))
 #+end_src
+- HP :: [[https://orgmode.org/]]
 
 ** org-agenda
+orgファイルから予定等を抽出
 #+begin_src emacs-lisp
 (use-package org-agenda
   :ensure nil ;; built-in
@@ -624,8 +596,10 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   (org-agenda-skip-scheduled-if-done nil)
   (org-agenda-skip-deadline-prewarning-if-scheduled nil))
 #+end_src
+- repo :: [[https://orgmode.org/manual/Agenda-Views.html]]
 
 ** org-super-agenda
+org-agendaにグループの機能を追加
 #+begin_src emacs-lisp
 (use-package org-super-agenda
   :ensure t
@@ -652,8 +626,10 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
             :order 9)
      (:priority<= "B" :order 1))))
      #+end_src
+- repo :: https://github.com/alphapapa/org-super-agenda
 
 ** org-capture
+orgファイルへのワンショットの書き込み
 #+begin_src emacs-lisp
 (use-package org-super-agenda
   :ensure nil ;; built-in
@@ -667,8 +643,10 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   (:map global-map
 	("C-c c" . 'org-capture)))
 #+end_src
-
+- doc :: [[https://orgmode.org/manual/Capture.html]]
+  
 ** org-jorunal
+orgを使用した日誌
 #+begin_src emacs-lisp
 (use-package org-journal
   :ensure t
@@ -681,8 +659,10 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   (:map global-map
 	("C-c j n e" . org-journal-new-entry)))
 #+end_src
+- repo :: [[https://github.com/bastibe/org-journal]]
 
 ** org-roam
+orgを使用した分散ノート
 #+begin_src emacs-lisp
 (use-package org-roam
   :ensure t
@@ -702,8 +682,11 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   :config
   (org-roam-db-autosync-mode 1))
 #+end_src
+- repo :: https://github.com/org-roam/org-roam
+- HP :: [[https://www.orgroam.com/]]
 
 ** org-caldav
+orgとcaldavの同期
 #+begin_src emacs-lisp
 (use-package org-caldav
   :ensure t
@@ -715,8 +698,10 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   (org-icalendar-include-todo 'all)
   (org-caldav-sync-todo t))
 #+end_src
-
+- repo :: [[https://github.com/dengste/org-caldav]]
+  
 ** org-babel
+orgのコードブロックの処理
 #+begin_src emacs-lisp
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -724,8 +709,10 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
    (clojure . t)
    (shell . t)))
 #+end_src
+- doc :: [[https://orgmode.org/worg/org-contrib/babel/]]
 
 ** org to latex
+orgのlatexへのエクスポート
 #+begin_src emacs-lisp
 (use-package ox-latex
   :ensure nil ;; included org
@@ -776,13 +763,43 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   :after
   (ox-latex)  )
 #+end_src
+- doc :: [[https://orgmode.org/worg/exporters/ox-overview.html]]
 
-** tramp --- for webdav
+** org-modern
+orgファイルのUIを改善
+#+begin_src emacs-lisp
+(use-package org-modern
+  :ensure t
+  :custom
+  (org-auto-align-tags nil)
+  (org-tags-column 0)
+  (org-fold-catch-invisible-edits 'show-and-error)
+  (org-special-ctrl-a/e t)
+  (org-insert-heading-respect-content t)
+  (org-hide-emphasis-markers t)
+  (org-pretty-entities t)
+  (org-ellipsis "…")
+  (org-agenda-tags-column 0)
+  (org-agenda-block-separator ?─)
+  (org-agenda-time-grid
+   '((daily today require-timed)
+     (800 1000 1200 1400 1600 1800 2000)
+     " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+   org-agenda-current-time-string
+   "◀── now ─────────────────────────────────────────────────"))
+
+(with-eval-after-load 'org (global-org-modern-mode))
+#+end_src
+- repo :: [[https://github.com/minad/org-modern]]
+
+** tramp
+リモートへの接続
 #+begin_src emacs-lisp
 (use-package tramp
   :ensure nil ;; built-in
   :defer t)
 #+end_src
+- doc :: [[https://www.gnu.org/software/tramp/tramp-emacs.html]]
 
 * EWW
 ** eww
@@ -808,6 +825,7 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   :config
   (define-key eww-mode-map (kbd "B") 'eww-browse-with-external-browser))
 #+end_src
+- doc :: [[https://www.gnu.org/software/emacs/manual/html_mono/eww.html]]
 
 ** dom
 #+begin_src emacs-lisp
@@ -838,8 +856,9 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   (define-key eww-mode-map (kbd "f") 'eww-lnum-follow)
   (define-key eww-mode-map (kbd "F") 'eww-lnum-universal))
 #+end_src
+- repo :: https://github.com/m00natic/eww-lnum
 
-* Theme
+* Themes
 ** catppuccin-theme
 #+begin_src emacs-lisp
 (use-package catppuccin-theme
@@ -849,6 +868,7 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 
 (load-theme 'catppuccin :no-conform)
 #+end_src
+- repo :: [[https://github.com/catppuccin/emacs]]
 
 ** doom-modeline
 #+begin_src emacs-lisp
@@ -857,6 +877,7 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   :init
   (doom-modeline-mode 1))
 #+end_src
+- repo :: [[https://github.com/seagle0128/doom-modeline]]
 
 ** nyan-mode
 #+begin_src emacs-lisp
@@ -872,6 +893,7 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   :config
   (nyan-mode 1))
 #+end_src
+- repo :: [[https://github.com/TeMPOraL/nyan-mode]]
 
 ** parrot
 #+begin_src emacs-lisp
@@ -882,18 +904,21 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   :config
   (parrot-mode 1))
 #+end_src
+- repo :: [[https://github.com/dp12/parrot]]
 
 ** all-the-icons
 #+begin_src emacs-lisp
 (use-package all-the-icons
   :ensure t)
 #+end_src
+- repo :: [[https://github.com/domtronn/all-the-icons.el]]
 
 ** nerd-icons
 #+begin_src emacs-lisp
 (use-package nerd-icons
   :ensure t)
 #+end_src
+- repo :: [[https://github.com/emacsmirror/nerd-icons]]
 
 ** kind-icon
 #+begin_src emacs-lisp
@@ -903,6 +928,7 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   :config
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 #+end_src
+- repo :: [[https://github.com/jdtsmith/kind-icon]]
 
 * Others
 ** emacs-direnv
@@ -912,3 +938,4 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   :config
   (direnv-mode))
 #+end_src
+- repo :: [[https://github.com/wbolster/emacs-direnv]]
