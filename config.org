@@ -605,26 +605,34 @@ org-agendaにグループの機能を追加
   :ensure t
   :custom
   (org-super-agenda-groups
-   '((:name "Today"  ; Optionally specify section name
-            :time-grid t  ; Items that appear on the time grid
-            :todo "TODAY")  ; Items that have this TODO keyword
-     (:name "Important"
-            :tag "bills"
-            :priority "A")
-     (:order-multi (2 (:name "Shopping in town"
-                             :and (:tag "shopping" :tag "@town"))
-		      (:name "Food-related"
-                             :tag ("food" "dinner"))
-		      (:name "Personal"
-                             :habit t
-                             :tag "personal")
-		      (:name "Space-related (non-moon-or-planet-related)"
-                             :and (:regexp ("space" "NASA")
-                                           :not (:regexp "moon" :tag "planet")))))
-     (:todo "WAITING" :order 8)  ; Set order of this section
-     (:todo ("SOMEDAY" "TO-READ" "CHECK" "TO-WATCH" "WATCHING")
-            :order 9)
-     (:priority<= "B" :order 1))))
+   '((:name "Important"
+	    :priority "A"
+	    :order 1)
+     (:name "Emacs"
+	    :tag "emacs"
+	    :order 2)
+     (:name "Linux"
+	    :tag "linux"
+	    :order 3)
+     (:name "Work"
+	    :tag "work"
+	    :order 4)
+     (:name "Develop"
+	    :tag "dev"
+	    :order 5)
+     (:name "Learning"
+	    :tag "learning"
+	    :order 6)
+     (:name "Search"
+	    :tag "search"
+	    :order 7)
+     (:name "Shopping"
+	    :tag "shopping"
+	    :order 8)
+     (:name "Nifty"
+	    :tag "nifty"
+	    :order 9)))
+  (org-super-agenda-mode t))
      #+end_src
 - repo :: https://github.com/alphapapa/org-super-agenda
 
