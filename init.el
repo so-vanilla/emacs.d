@@ -25,8 +25,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(eglot eglot-booster direnv kind-icon all-the-icons parrot nyan-mode doom-modeline catppuccin-theme eww-lnum org-caldav org-roam org-journal org-super-agenda cargo rustic rust-mode python-mode nix-mode cider clojure-mode vterm pdf-tools org-modern neotree embark-consult embark marginalia orderless vertico magit smartparens yasnippet-capf yasnippet-snippets yasnippet cape corfu ddskk leaf-keywords leaf T))
+ '(eglot-confirm-server-edits nil nil nil "Customized with use-package eglot")
+ '(package-selected-packages '(eglot-booster T))
  '(package-vc-selected-packages
    '((eglot-booster :vc-backend Git :url "https://github.com/jdtsmith/eglot-booster"))))
 (custom-set-faces

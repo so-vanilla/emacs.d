@@ -191,7 +191,6 @@ LSP非稼動時におけるcapf
 日本語入力
 #+begin_src emacs-lisp
 (use-package ddskk
-  :ensure t
   :bind
   (("C-x C-j" . skk-mode))
   :custom
@@ -208,7 +207,6 @@ LSP非稼動時におけるcapf
 capfを使用
 #+begin_src emacs-lisp
 (use-package corfu
-  :ensure t
   :custom
   (corfu-auto t)
   (corfu-auto-delay 0.0)
@@ -226,7 +224,6 @@ capfを使用
 completion-at-point-functionを提供
 #+begin_src emacs-lisp
 (use-package cape
-  :ensure t
   :init
   (setq completion-at-point-functions completion-functions))
   #+end_src
@@ -239,7 +236,6 @@ completion-at-point-functionを提供
 =~/.emacs.d/snippets/= に設定有り
 #+begin_src emacs-lisp
 (use-package yasnippet
-  :ensure t
   :hook
   ((prog-mode . yas-minor-mode)
    (org-mode . yas-minor-mode))
@@ -260,8 +256,7 @@ completion-at-point-functionを提供
 ** yasnippet-snippets
 yasnippetのスニペット集
 #+begin_src emacs-lisp
-(use-package yasnippet-snippets
-  :ensure t)
+(use-package yasnippet-snippets)
 #+end_src
 - repo :: https://github.com/AndreaCrotti/yasnippet-snippets
 
@@ -269,7 +264,6 @@ yasnippetのスニペット集
 yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 #+begin_src emacs-lisp
 (use-package yasnippet-capf
-  :ensure t
   :after
   (corfu
    yasnippet))
@@ -281,7 +275,6 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 括弧補完に加え、対応する括弧の自動削除など
 #+begin_src emacs-lisp
 (use-package smartparens
-  :ensure t
   :hook
   (prog-mode text-mode markdown-mode)
   :config
@@ -293,8 +286,7 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 * Gitインタフェース
 ** magit
 #+begin_src emacs-lisp
-(use-package magit
-  :ensure t)
+(use-package magit)
 #+end_src
 - repo :: [[https://github.com/magit/magit]]
 - doc :: [[https://magit.vc/]]
@@ -304,7 +296,6 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 ミニバッファへの候補の表示、補完
 #+begin_src emacs-lisp
 (use-package vertico
-  :ensure t
   :init
   (vertico-mode))
 #+end_src
@@ -314,7 +305,6 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 ミニバッファのマッチパターンの調整
 #+begin_src emacs-lisp
 (use-package orderless
-  :ensure t
   :custom
   (completion-styles '(orderless basic))
   (completion-category-overrides '((file (styles basic partial-completion)))))
@@ -325,7 +315,6 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 ミニバッファの候補にドキュメントを付与
 #+begin_src emacs-lisp
 (use-package marginalia
-  :ensure t
   :init
   (marginalia-mode))
 #+end_src
@@ -335,7 +324,6 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 ミニバッファのアクションを追加
 #+begin_src emacs-lisp
 (use-package embark
-  :ensure t
   :bind
   (:map global-map
 	([remap isearch-forward] . embark-isearch-forward)
@@ -347,7 +335,6 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 ** embark-consult
 #+begin_src emacs-lisp
 (use-package embark-consult
-  :ensure t
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 #+end_src
@@ -357,7 +344,6 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 組込み関数の拡張、その他便利な関数の追加
 #+begin_src emacs-lisp
 (use-package consult
-  :ensure t
   :bind
   (:map global-map
 	([remap switch-to-buffer] . consult-buffer)
@@ -376,7 +362,6 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 ファイルツリーの表示
 #+begin_src emacs-lisp
 (use-package neotree
-  :ensure t
   :bind
   (:map global-map
 	("<f5>" . neotree-toggle))
@@ -390,7 +375,6 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 バッファへのPDFの表示
 #+begin_src emacs-lisp
 (use-package pdf-tools
-  :ensure t
   :config
   (pdf-tools-install)
   (setq-default pdf-view-display-size 'fit-page)
@@ -405,7 +389,6 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 ターミナル
 #+begin_src emacs-lisp
 (use-package vterm
-  :ensure t
   :commands
   (vterm)
   :hook
@@ -418,7 +401,6 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 ** c
 #+begin_src emacs-lisp
 (use-package cc-mode
-  :ensure nil ;; built-in
   :mode
   (("\\.c\\'" . c-mode)
    ("\\.h\\'" . c-mode)
@@ -433,7 +415,6 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 ** clojure
 #+begin_src emacs-lisp
 (use-package clojure-mode
-  :ensure t
   :mode
   (("\\.clj\\'" . clojure-mode)
    ("\\.cljs\\'" . clojurescript-mode)
@@ -444,8 +425,7 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 ** clojure repl
 clojureのREPL及びorg-babelでのclojureの実行のための設定
 #+begin_src emacs-lisp
-(use-package cider
-  :ensure t)
+(use-package cider)
 (require 'ob-clojure)
 (setq org-babel-clojure-backend 'cider)
 (setq cider-repl-pop-to-buffer-on-connect nil)
@@ -456,7 +436,6 @@ clojureのREPL及びorg-babelでのclojureの実行のための設定
 ** nix
 #+begin_src emacs-lisp
 (use-package nix-mode
-  :ensure t
   :mode
   ("\\.nix\\'" . nix-mode))
 #+end_src
@@ -465,7 +444,6 @@ clojureのREPL及びorg-babelでのclojureの実行のための設定
 ** python
 #+begin_src emacs-lisp
 (use-package python-mode
-  :ensure t
   :mode
   ("\\.py\\'" . python-mode))
 #+end_src
@@ -474,7 +452,6 @@ clojureのREPL及びorg-babelでのclojureの実行のための設定
 ** rust
 #+begin_src emacs-lisp
 (use-package rust-mode
-  :ensure t
   :mode
   ("\\.rs\\'")
   :custom
@@ -483,7 +460,6 @@ clojureのREPL及びorg-babelでのclojureの実行のための設定
 rust-modeの拡張
 #+begin_src emacs-lisp
 (use-package rustic
-  :ensure t
   :after
   (rust-mode)
   :custom
@@ -493,15 +469,13 @@ rust-modeの拡張
 #+end_src
 cargoのインタフェース
 #+begin_src emacs-lisp
-(use-package cargo
-  :ensure t)
+(use-package cargo)
 #+end_src
 
 * LSP
 ** eglot
 #+begin_src emacs-lisp
 (use-package eglot
-  :ensure nil ;; built-in
   :hook
   ((bash-ts-mode . eglot-ensure)
    (c-mode . eglot-ensure)
@@ -548,7 +522,6 @@ cargoのインタフェース
 ** flymake
 #+begin_src emacs-lisp
 (use-package flymake
-  :ensure nil ;;built-in
   :bind
   (:map global-map
 	("M-n" . flymake-goto-next-error)
@@ -560,24 +533,23 @@ cargoのインタフェース
 ** org
 コア
 #+begin_src emacs-lisp
-  (use-package org
-    :ensure nil ;; built-in
-    :hook
-    (org-mode . (lambda ()
-		  (setq-local completion-at-point-functions (append completion-functions '(cape-elisp-block cape-elisp-symbol)))))
-    :custom
-    (org-src-preserve-indentation nil)
-    (org-edit-src-content-indentation 0)
-    (org-use-speed-commands t)
-    (org-directory "~/org")
-    :bind
-    (:map global-map
-	  ("C-c a" . 'org-agenda)
-	  :map org-mode-map
-	  ("C-c f h e" . 'org-fold-hide-entry)
-	  ("C-c f h a" . 'org-fold-hide-block-all)
-	  ("C-c f s e" . 'org-fold-show-entry)
-	  ("C-c f s a" . 'org-fold-show-all)))
+(use-package org
+  :hook
+  (org-mode . (lambda ()
+		(setq-local completion-at-point-functions (append completion-functions '(cape-elisp-block cape-elisp-symbol)))))
+  :custom
+  (org-src-preserve-indentation nil)
+  (org-edit-src-content-indentation 0)
+  (org-use-speed-commands t)
+  (org-directory "~/org")
+  :bind
+  (:map global-map
+	("C-c a" . 'org-agenda)
+	:map org-mode-map
+	("C-c f h e" . 'org-fold-hide-entry)
+	("C-c f h a" . 'org-fold-hide-block-all)
+	("C-c f s e" . 'org-fold-show-entry)
+	("C-c f s a" . 'org-fold-show-all)))
 #+end_src
 - HP :: [[https://orgmode.org/]]
 
@@ -585,13 +557,11 @@ cargoのインタフェース
 orgファイルから予定等を抽出
 #+begin_src emacs-lisp
 (use-package org-agenda
-  :ensure nil ;; built-in
   :after
-  (org
-   tramp)
+  (org)
   :custom
-  (org-agenda-files '("~/org/general.org"))
-  (org-agenda-span 'day)
+  (org-agenda-files '("~/org/todo.org" "~/org/schedule.org"))
+  (org-agenda-span 'week)
   (org-agenda-skip-deadline-if-done nil)
   (org-agenda-skip-scheduled-if-done nil)
   (org-agenda-skip-deadline-prewarning-if-scheduled nil))
@@ -602,34 +572,45 @@ orgファイルから予定等を抽出
 org-agendaにグループの機能を追加
 #+begin_src emacs-lisp
 (use-package org-super-agenda
-  :ensure t
   :custom
   (org-super-agenda-groups
-   '((:name "Important"
+   '((:name "Schedule"
+	    :file-path "~/org/schedule.org"
+	    :time-grid t)
+     (:name "Important"
+	    :file-path "~/org/todo.org"
 	    :priority "A"
 	    :order 1)
      (:name "Emacs"
+	    :file-path "~/org/todo.org"
 	    :tag "emacs"
 	    :order 2)
      (:name "Linux"
+	    :file-path "~/org/todo.org"
 	    :tag "linux"
 	    :order 3)
      (:name "Work"
+	    :file-path "~/org/todo.org"
 	    :tag "work"
 	    :order 4)
      (:name "Develop"
+	    :file-path "~/org/todo.org"
 	    :tag "dev"
 	    :order 5)
      (:name "Learning"
+	    :file-path "~/org/todo.org"
 	    :tag "learning"
 	    :order 6)
      (:name "Search"
+	    :file-path "~/org/todo.org"
 	    :tag "search"
 	    :order 7)
      (:name "Shopping"
+	    :file-path "~/org/todo.org"
 	    :tag "shopping"
 	    :order 8)
      (:name "Nifty"
+	    :file-path "~/org/todo.org"
 	    :tag "nifty"
 	    :order 9)))
   (org-super-agenda-mode t))
@@ -640,12 +621,11 @@ org-agendaにグループの機能を追加
 orgファイルへのワンショットの書き込み
 #+begin_src emacs-lisp
 (use-package org-super-agenda
-  :ensure nil ;; built-in
   :custom
   (org-capture-templates
-   '(("t" "Todo" entry (file "~/org/general.org")
+   '(("t" "Todo" entry (file "~/org/todo.org")
       "* TODO %?\n")
-     ("s" "Schedule" entry (file "~/org/general.org")
+     ("s" "Schedule" entry (file "~/org/schedule.org")
       "* %?\n")))
   :bind
   (:map global-map
@@ -657,7 +637,6 @@ orgファイルへのワンショットの書き込み
 orgを使用した日誌
 #+begin_src emacs-lisp
 (use-package org-journal
-  :ensure t
   :after
   (org)
   :custom
@@ -673,7 +652,6 @@ orgを使用した日誌
 orgを使用した分散ノート
 #+begin_src emacs-lisp
 (use-package org-roam
-  :ensure t
   :hook
   ((org-mode . (lambda ()
 		 (local-set-key (kbd "C-c r t a") 'org-roam-tag-add)
@@ -697,11 +675,13 @@ orgを使用した分散ノート
 orgとcaldavの同期
 #+begin_src emacs-lisp
 (use-package org-caldav
-  :ensure t
   :custom
-  (org-caldav-url "https://webmail.gandi.net/SOGo/dav/somura-vanilla@so-icecream.com/Calendar")
-  (org-caldav-calendar-id "personal")
-  (org-caldav-inbox "~/org/general.org")
+  (org-caldav-calendars
+  '((:calendar-id "67B2-67412200-1A7-7F1B4200" :files ("~/org/todo.org")
+		  :inbox "~/org/todo.org")
+    (:calendar-id "11D3-67412200-21D-48611280" :files ("~/org/schedule.org")
+		  :inbox "~/org/schedule.org")) )
+  (org-caldav-url (getenv "CALDAV_LINK"))
   (org-icalendar-timezone "Asia/Tokyo")
   (org-icalendar-include-todo 'all)
   (org-caldav-sync-todo t))
@@ -723,7 +703,6 @@ orgのコードブロックの処理
 orgのlatexへのエクスポート
 #+begin_src emacs-lisp
 (use-package ox-latex
-  :ensure nil ;; included org
   :after
   (org)
   :custom
@@ -767,7 +746,6 @@ orgのlatexへのエクスポート
                  ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 
 (use-package ox-beamer
-  :ensure nil ;; included org
   :after
   (ox-latex)  )
 #+end_src
@@ -777,7 +755,6 @@ orgのlatexへのエクスポート
 orgファイルのUIを改善
 #+begin_src emacs-lisp
 (use-package org-modern
-  :ensure t
   :custom
   (org-auto-align-tags nil)
   (org-tags-column 0)
@@ -804,7 +781,6 @@ orgファイルのUIを改善
 リモートへの接続
 #+begin_src emacs-lisp
 (use-package tramp
-  :ensure nil ;; built-in
   :defer t)
 #+end_src
 - doc :: [[https://www.gnu.org/software/tramp/tramp-emacs.html]]
@@ -813,7 +789,6 @@ orgファイルのUIを改善
 ** eww
 #+begin_src emacs-lisp
 (use-package eww
-  :ensure nil ;; built-in
   :custom
   (shr-use-images t)
   (shr-use-colors t)
@@ -838,7 +813,6 @@ orgファイルのUIを改善
 ** dom
 #+begin_src emacs-lisp
 (use-package dom
-  :ensure nil ;; built-in
   :after
   (eww))
 #+end_src
@@ -846,7 +820,6 @@ orgファイルのUIを改善
 ** shr
 #+begin_src emacs-lisp
 (use-package shr
-  :ensure nil ;; built-in
   :after
   (eww)
   :custom
@@ -857,7 +830,6 @@ orgファイルのUIを改善
 ** eww-lnum
 #+begin_src emacs-lisp
 (use-package eww-lnum
-  :ensure t
   :after
   (eww)
   :config
@@ -870,7 +842,6 @@ orgファイルのUIを改善
 ** catppuccin-theme
 #+begin_src emacs-lisp
 (use-package catppuccin-theme
-  :ensure t
   :config
   (setq catppuccin-flavor 'latte))
 
@@ -881,7 +852,6 @@ orgファイルのUIを改善
 ** doom-modeline
 #+begin_src emacs-lisp
 (use-package doom-modeline
-  :ensure t
   :init
   (doom-modeline-mode 1))
 #+end_src
@@ -890,7 +860,6 @@ orgファイルのUIを改善
 ** nyan-mode
 #+begin_src emacs-lisp
 (use-package nyan-mode
-  :ensure t
   :hook
   (prog-mode . nyan-mode)
   :custom
@@ -906,7 +875,6 @@ orgファイルのUIを改善
 ** parrot
 #+begin_src emacs-lisp
 (use-package parrot
-  :ensure t
   :custom
   (parrot-num-rotations nil)
   :config
@@ -916,22 +884,19 @@ orgファイルのUIを改善
 
 ** all-the-icons
 #+begin_src emacs-lisp
-(use-package all-the-icons
-  :ensure t)
+(use-package all-the-icons)
 #+end_src
 - repo :: [[https://github.com/domtronn/all-the-icons.el]]
 
 ** nerd-icons
 #+begin_src emacs-lisp
-(use-package nerd-icons
-  :ensure t)
+(use-package nerd-icons)
 #+end_src
 - repo :: [[https://github.com/emacsmirror/nerd-icons]]
 
 ** kind-icon
 #+begin_src emacs-lisp
 (use-package kind-icon
-  :ensure t
   :after corfu
   :config
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
@@ -942,7 +907,6 @@ orgファイルのUIを改善
 ** emacs-direnv
 #+begin_src emacs-lisp
 (use-package direnv
-  :ensure t
   :config
   (direnv-mode))
 #+end_src
