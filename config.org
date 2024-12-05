@@ -304,7 +304,7 @@ Vimのテキストオブジェクトのような機能の提供
               ("M-U" . puni-splice-killing-backward)
               ("M-z" . puni-squeeze)))
 #+end_src
-
+- repo :: [[https://github.com/AmaiKinono/puni]]
 
 * Gitインタフェース
 ** magit
