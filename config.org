@@ -268,22 +268,12 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 ** paren
 対応する括弧のハイライト
 #+begin_src emacs-lisp
-(show-paren-mode t)
-(setq show-paren-style 'mixed)
+(use-package paren
+  :custom
+  (show-paren-style 'mixed)
+  :init
+  (show-paren-mode t))
 #+end_src
-
-
-** smartparens --- auto pair
-括弧補完に加え、対応する括弧の自動削除など
-#+begin_src emacs-lisp
-(use-package smartparens
-  :hook
-  (prog-mode text-mode markdown-mode)
-  :config
-  (require 'smartparens-config))
-#+end_src
-- repo :: [[https://github.com/Fuco1/smartparens]]
-- doc :: [[https://smartparens.readthedocs.io/en/latest/]]
 
 * Gitインタフェース
 ** magit
