@@ -265,6 +265,15 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 - repo :: [[https://github.com/elken/yasnippet-capf]]
 
 * 構造 --- 括弧等
+** electric-pair
+対応する括弧の自動補完
+#+begin_src emacs-lisp
+(use-package electric
+  :init
+  (electric-pair-mode t))
+#+end_src
+
+
 ** paren
 対応する括弧のハイライト
 #+begin_src emacs-lisp
@@ -283,6 +292,10 @@ Vimのテキストオブジェクトのような機能の提供
   :init
   (puni-global-mode t)
   :bind (:map puni-mode-map
+	      ([remap delete-backward-char] . puni-backward-delete-char)
+	      ([remap delete-forward-cahr] . puni-forward-delete-char)
+	      ("M-h" . puni-backward-kill-word)
+	      ("M-d" . puni-forward-kill-word)
 	      ("C-)" . puni-slurp-forward)
               ("C-}" . puni-barf-forward)
               ("M-(" . puni-wrap-round)
