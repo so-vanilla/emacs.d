@@ -49,12 +49,6 @@ yes-or-no-pの代わりにy-or-n-pを表示
 (global-display-line-numbers-mode t)
 #+end_src
 
-対応する括弧を表示。対応する括弧が画面内に無い場合は括弧内をすべてハイライト
-#+begin_src emacs-lisp
-(show-paren-mode t)
-(setq show-paren-style 'mixed)
-#+end_src
-
 カット、ヤンクをGUIのクリップボードと連携させる
 #+begin_src emacs-lisp
 (setq wl-copy-process nil)
@@ -270,7 +264,15 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
  #+end_src
 - repo :: [[https://github.com/elken/yasnippet-capf]]
 
-* 括弧補完
+* 括弧
+** paren
+対応する括弧のハイライト
+#+begin_src emacs-lisp
+(show-paren-mode t)
+(setq show-paren-style 'mixed)
+#+end_src
+
+
 ** smartparens --- auto pair
 括弧補完に加え、対応する括弧の自動削除など
 #+begin_src emacs-lisp
