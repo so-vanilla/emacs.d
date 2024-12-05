@@ -264,7 +264,7 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
  #+end_src
 - repo :: [[https://github.com/elken/yasnippet-capf]]
 
-* 括弧
+* 構造 --- 括弧等
 ** paren
 対応する括弧のハイライト
 #+begin_src emacs-lisp
@@ -274,6 +274,14 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
   :init
   (show-paren-mode t))
 #+end_src
+
+** puni
+Vimのテキストオブジェクトのような機能の提供
+- 括弧内の削除など
+#+begin_src emacs-lisp
+(use-package puni)
+#+end_src
+
 
 * Gitインタフェース
 ** magit
