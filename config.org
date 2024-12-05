@@ -185,10 +185,9 @@ LSP非稼動時におけるcapf
 日本語入力
 #+begin_src emacs-lisp
 (use-package ddskk
-  :bind
-  (("C-x C-j" . skk-mode))
   :custom
   (skk-large-jisyo (expand-file-name "~/repos/github.com/skk-dev/dict/SKK-JISYO.L"))
+  (default-input-method "japanese-skk")
   :config
   (require 'ccc))
 #+end_src
