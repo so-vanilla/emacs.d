@@ -279,7 +279,17 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 Vimのテキストオブジェクトのような機能の提供
 - 括弧内の削除など
 #+begin_src emacs-lisp
-(use-package puni)
+(use-package puni
+  :init
+  (puni-global-mode t)
+  :bind (:map puni-mode-map
+	      ("C-)" . puni-slurp-forward)
+              ("C-}" . puni-barf-forward)
+              ("M-(" . puni-wrap-round)
+              ("M-s" . puni-splice)
+              ("M-r" . puni-raise)
+              ("M-U" . puni-splice-killing-backward)
+              ("M-z" . puni-squeeze)))
 #+end_src
 
 
