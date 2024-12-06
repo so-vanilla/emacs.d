@@ -588,7 +588,7 @@ orgファイルから予定等を抽出
   (org)
   :custom
   (org-agenda-files '("~/org/todo.org" "~/org/schedule.org"))
-  (org-agenda-span 'week)
+  (org-agenda-span 'day)
   (org-agenda-skip-deadline-if-done nil)
   (org-agenda-skip-scheduled-if-done nil)
   (org-agenda-skip-deadline-prewarning-if-scheduled nil))
