@@ -911,13 +911,15 @@ orgファイルのUIを改善
 
 ** all-the-icons
 #+begin_src emacs-lisp
-(use-package all-the-icons)
+(use-package all-the-icons
+  :demand t)
 #+end_src
 - repo :: [[https://github.com/domtronn/all-the-icons.el]]
 
 ** nerd-icons
 #+begin_src emacs-lisp
-(use-package nerd-icons)
+(use-package nerd-icons
+  :demand t)
 #+end_src
 - repo :: [[https://github.com/emacsmirror/nerd-icons]]
 
