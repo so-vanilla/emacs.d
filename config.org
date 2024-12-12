@@ -250,6 +250,9 @@ yasnippetをcorfuで利用可能なようにcapfへの変換を行う
 対応する括弧の自動補完
 #+begin_src emacs-lisp
 (use-package electric
+  :hook
+  (minibuffer-setup-hook . (lambda () electric-pair-mode 0))
+  (minibuffer-setup-hook . (lambda () electric-pair-mode 1))
   :init
   (electric-pair-mode t))
 #+end_src
