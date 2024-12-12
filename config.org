@@ -671,7 +671,8 @@ orgを使用した日誌
   (org-journal-file-format "%Y-%m-%d.org")
   :bind
   (:map global-map
-	("C-c j n e" . org-journal-new-entry)))
+	("C-c j n e" . org-journal-new-entry)
+	("C-c j o c" . journal-open-current-journal-file)))
 #+end_src
 - repo :: [[https://github.com/bastibe/org-journal]]
 
