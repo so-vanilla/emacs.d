@@ -195,24 +195,6 @@ LSP非稼動時におけるcapf
 - doc :: [[https://ddskk.readthedocs.io/ja/latest/]]
 
 * 補完
-** corfu
-バッファやミニバッファの補完のフロントエンド
-capfを使用
-#+begin_src emacs-lisp
-(use-package corfu
-  :custom
-  (corfu-auto t)
-  (corfu-auto-delay 0.0)
-  (corfu-auto-refix 1)
-  :init
-  (global-corfu-mode 1)
-  :config
-  (define-key corfu-map [return] nil)
-  (define-key corfu-map (kbd "RET") nil))
-#+end_src
-- repo :: [[https://github.com/minad/corfu]]
-- doc(elpa) :: [[https://elpa.gnu.org/packages/doc/corfu.html]]
-  
 ** cape
 completion-at-point-functionを提供
 #+begin_src emacs-lisp
@@ -490,9 +472,9 @@ rust-modeの拡張
   :after
   (rust-mode)
   :custom
-  (rustic-lsp-client 'eglot)
   (rustic-format-on-save t)
-  (rustic-cargo-use-last-stored-auguments t))
+  (rustic-cargo-use-last-stored-auguments t)
+  (rustic-lsp-client 'lsp-bridge))
 #+end_src
 cargoのインタフェース
 #+begin_src emacs-lisp
@@ -500,50 +482,20 @@ cargoのインタフェース
 #+end_src
 
 * LSP
-** eglot
 #+begin_src emacs-lisp
-(use-package eglot
-  :hook
-  ((bash-ts-mode . eglot-ensure)
-   (c-mode . eglot-ensure)
-   (c-ts-mode . eglot-ensure)
-   (clojure-mode . eglot-ensure)
-   (go-ts-mode . eglot-ensure)
-   (markdown-mode . eglot-ensure)
-   (java-mode . eglot-ensure)
-   (java-ts-mode . eglot-ensure)
-   (js-mode . eglot-ensure)
-   (latex-mode . eglot-ensure)
-   (nix-mode . eglot-ensure)
-   (python-mode . eglot-ensure)
-   (python-ts-mode . eglot-ensure)
-   (rust-mode . eglot-ensure)
-   (rust-ts-mode .  eglot-ensure)
-   (typescript-ts-mode . eglot-ensure))
+(use-package lsp-bridge
   :custom
-  (eglot-autoshutdown t)
-  (eglot-confirm-server-initiated-edits nil)
-  :config
-  (add-to-list 'eglot-server-programs
-	       '(nix-mode . ("nil")))
-  (add-to-list 'eglot-server-programs
-	       '(js-mode . ("deno" "lsp")))
-  (add-to-list 'eglot-server-programs
-	       '(js-ts-mode . ("deno" "lsp")))
-  (add-to-list 'eglot-server-programs
-	       '(typescript-ts-mode . ("deno" "lsp"))))
-   #+end_src
-- repo :: [[https://github.com/joaotavora/eglot]]
-- doc :: [[https://www.gnu.org/software/emacs/manual/html_node/eglot/index.html]]
-
-** eglot-booster
-#+begin_src emacs-lisp
-(use-package eglot-booster
-  :after eglot
-  :config
-  (eglot-booster-mode))
+  (lsp-bridge-c-lsp-server "clangd")
+  (lsp-bridge-python-lsp-server "pyright")
+  (lsp-bridge-tex-lsp-server "texlab")
+  (lsp-bridge-nix-lsp-server "nil")
+  (lsp-bridge-enable-org-babel t)
+  (lsp-bridge-enable-completion-in-minibuffer t)
+  (lsp-bridge-enable-hover-diagnostic t)
+  (acm-enable-capf t)
+  :init
+  (global-lsp-bridge-mode))
 #+end_src
-- repo :: https://github.com/jdtsmith/eglot-booster
 
 * Error/Diagnositcs
 ** flymake
@@ -672,7 +624,7 @@ orgを使用した日誌
   :bind
   (:map global-map
 	("C-c j n e" . org-journal-new-entry)
-	("C-c j o c" . journal-open-current-journal-file)))
+	("C-c j o c" . org-journal-open-current-journal-file)))
 #+end_src
 - repo :: [[https://github.com/bastibe/org-journal]]
 
