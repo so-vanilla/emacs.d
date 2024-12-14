@@ -497,7 +497,10 @@ cargoのインタフェース
   (lsp-bridge-enable-hover-diagnostic t)
   (acm-enable-capf t)
   :init
-  (global-lsp-bridge-mode))
+  (global-lsp-bridge-mode)
+  :bind
+  (:map acm-mode-map
+	("C-m" . newline)))
 #+end_src
 
 * Error/Diagnositcs
