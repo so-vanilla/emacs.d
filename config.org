@@ -189,7 +189,10 @@ LSP非稼動時におけるcapf
   (skk-large-jisyo (expand-file-name "~/repos/github.com/skk-dev/dict/SKK-JISYO.L"))
   (default-input-method "japanese-skk")
   :config
-  (require 'ccc))
+  (require 'ccc)
+  :bind
+  (:map global-map
+	("C-j" . skk-kakutei)))
 #+end_src
 - repo :: [[https://github.com/skk-dev/ddskk]]
 - doc :: [[https://ddskk.readthedocs.io/ja/latest/]]
@@ -496,11 +499,13 @@ cargoのインタフェース
   (lsp-bridge-enable-completion-in-minibuffer t)
   (lsp-bridge-enable-hover-diagnostic t)
   (acm-enable-capf t)
+  (acm-enable-codeium t)
   :init
   (global-lsp-bridge-mode)
   :bind
   (:map acm-mode-map
-	("C-m" . newline)))
+	("C-m" . newline)
+	("C-j" . newline)))
 #+end_src
 
 * Error/Diagnositcs
