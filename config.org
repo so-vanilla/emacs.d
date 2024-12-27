@@ -568,6 +568,7 @@ _r_: row(table)
   ("L" org-previous-link)
   ("B" org-previous-block)
   ("F" org-table-previous-field)
+  ("C-m" nil :exit t)
   ("q" nil :exit t))
 (define-key org-mode-map (kbd "M-SPC") 'hydra-org-mode/body)
 #+end_src
@@ -580,9 +581,12 @@ globalに呼び出せるやつ
 ^^------------
 _j_: journal
 _r_: roam
+_s_: sync CalDAV
 "
   ("j" hydra-org-journal/body)
   ("r" hydra-org-roam/body)
+  ("s" org-caldav-sync)
+  ("C-m" nil)
   ("q" nil))
 (define-key global-map (kbd "<f2>") 'hydra-org/body)
 #+end_src
@@ -702,6 +706,7 @@ _n_: new entry  _S_: search(all)
   ("y" org-journal-search-calendar-year)
   ("m" org-journal-search-calendar-month)
   ("w" org-journal-search-calendar-week)
+  ("C-m" nil)
   ("q" nil))
 #+end_src
 
