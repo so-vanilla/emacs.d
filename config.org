@@ -371,10 +371,7 @@ Vimのテキストオブジェクトのような機能の提供
 	("C-x C-b" . consult-buffer-other-window)
 	([remap imenu] . consult-imenu)
 	("C-/" . consult-line)
-	([remap goto-line] . consult-goto-line)
-	("<f2> o l" . consult-outline)
-	("<f2> f m" . consult-flymake)
-	("<f2> r g" . consult-ripgrep)))
+	([remap goto-line] . consult-goto-line)))
 #+end_src
 - repo :: [[https://github.com/minad/consult]]
 
@@ -550,6 +547,32 @@ cargoのインタフェース
 - HP :: [[https://orgmode.org/]]
 
 *** hydra
+org-modeで動作するやつ
+#+begin_src emacs-lisp
+(defhydra hydra-org-mode (:hint nil)
+  "
+^Next^             ^Previous^
+^^^^----------------------------------
+_h_: heading       _H_: heading
+_l_: link          _L_: link
+_b_: block         _B_: block
+_f_: field(table)  _F_: field(table)
+_r_: row(table)    
+"
+  ("h" org-next-visible-heading)
+  ("l" org-next-link)
+  ("b" org-next-block)
+  ("f" org-table-next-field)
+  ("r" org-table-next-row)
+  ("H" org-previous-visible-heading)
+  ("L" org-previous-link)
+  ("B" org-previous-block)
+  ("F" org-table-previous-field)
+  ("q" nil :exit t))
+(define-key org-mode-map (kbd "M-SPC") 'hydra-org-mode/body)
+#+end_src
+
+globalに呼び出せるやつ
 #+begin_src emacs-lisp
 (defhydra hydra-org (:hint nil :exit t)
   "
@@ -561,6 +584,7 @@ _r_: roam
   ("j" hydra-org-journal/body)
   ("r" hydra-org-roam/body)
   ("q" nil))
+(define-key global-map (kbd "<f2>") 'hydra-org/body)
 #+end_src
 
 ** org-agenda
