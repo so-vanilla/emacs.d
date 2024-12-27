@@ -197,6 +197,13 @@ LSP非稼動時におけるcapf
 - repo :: [[https://github.com/skk-dev/ddskk]]
 - doc :: [[https://ddskk.readthedocs.io/ja/latest/]]
 
+* キー候補の表示
+** hydra
+#+begin_src emacs-lisp
+(use-package hydra)
+#+end_src
+- repo :: [[https://github.com/abo-abo/hydra]]
+  
 * 補完
 ** cape
 completion-at-point-functionを提供
@@ -228,7 +235,6 @@ completion-at-point-functionを提供
   (:map global-map
 	("M-]" . yas-next-field)
 	("M-[" . yas-prev-field)))
-
 #+end_src
 
 ** yasnippet-snippets
@@ -543,6 +549,20 @@ cargoのインタフェース
 #+end_src
 - HP :: [[https://orgmode.org/]]
 
+*** hydra
+#+begin_src emacs-lisp
+(defhydra hydra-org (:hint nil :exit t)
+  "
+^Command^
+^^------------
+_j_: journal
+_r_: roam
+"
+  ("j" hydra-org-journal/body)
+  ("r" hydra-org-roam/body)
+  ("q" nil))
+#+end_src
+
 ** org-agenda
 orgファイルから予定等を抽出
 #+begin_src emacs-lisp
@@ -638,18 +658,33 @@ orgを使用した日誌
 	("C-c j o c" . org-journal-open-current-journal-file)))
 #+end_src
 - repo :: [[https://github.com/bastibe/org-journal]]
+  
+*** hydra
+#+begin_src emacs-lisp
+(defhydra hydra-org-journal (:color pink :hint nil :exit t)
+  "
+^Open^          ^Search^
+^^^^-----------------------------------
+_t_: today      _s_: search(calendar)
+_n_: new entry  _S_: search(all)
+^ ^             _y_: calendar year
+^ ^             _m_: calendar month
+^ ^             _w_: calendar week
+"		
+  ("t" org-journal-open-current-journal-file)
+  ("n" org-journal-new-entry)
+  ("s" org-journal-search)
+  ("S" org-journal-search-forever)
+  ("y" org-journal-search-calendar-year)
+  ("m" org-journal-search-calendar-month)
+  ("w" org-journal-search-calendar-week)
+  ("q" nil))
+#+end_src
 
 ** org-roam
 orgを使用した分散ノート
 #+begin_src emacs-lisp
 (use-package org-roam
-  :hook
-  ((org-mode . (lambda ()
-		 (local-set-key (kbd "C-c r t a") 'org-roam-tag-add)
-		 (local-set-key (kbd "C-c r t r") 'org-roam-tag-remove)
-		 (local-set-key (kbd "C-c r a a") 'org-roam-alias-add)
-		 (local-set-key (kbd "C-c r a r") 'org-roam-alias-remove)
-		 (local-set-key (kbd "C-c r n i") 'org-roam-node-insert))))
   :bind
   (:map global-map
 	("C-c r n f" . org-roam-node-find)
@@ -661,6 +696,34 @@ orgを使用した分散ノート
 #+end_src
 - repo :: https://github.com/org-roam/org-roam
 - HP :: [[https://www.orgroam.com/]]
+
+*** hydra
+#+begin_src emacs-lisp
+(defhydra hydra-org-roam (:color pink :hint nil :exit t)
+  "
+^Node^       ^Dailies^                                     ^Other^
+^^^^^^--------------------------------------------------------------
+_f_: find    _t_: today(goto)     _y_: yesterday(goto)     _s_: sync
+_i_: insert  _T_: today(capture)  _Y_: yesterday(capture)  _g_: graph
+_r_: random  _d_: date(goto)      _n_: tomorrow(goto)
+^ ^          _D_: date(capture)   _N_: tomorrow(capture)
+"
+  ("f" org-roam-node-find)
+  ("i" org-roam-node-insert)
+  ("r" org-roam-node-random)
+  ("t" org-roam-dailies-goto-today)
+  ("T" org-roam-dailies-capture-today)
+  ("d" org-roam-dailies-goto-date)
+  ("D" org-roam-dailies-capture-date)
+  ("y" org-roam-dailies-goto-yesterday)
+  ("Y" org-roam-dailies-capture-yesterday)
+  ("n" org-roam-dailies-goto-tomorrow)
+  ("N" org-roam-dailies-capture-tomorrow)
+  ("s" org-roam-db-sync)
+  ("g" org-roam-graph)
+  ("q" nil))
+#+end_src
+
 
 ** org-caldav
 orgとcaldavの同期
