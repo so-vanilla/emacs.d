@@ -502,13 +502,13 @@ cargoのインタフェース
   (lsp-bridge-enable-completion-in-minibuffer t)
   (lsp-bridge-enable-hover-diagnostic t)
   (acm-enable-capf t)
-  (acm-enable-codeium t)
+  (acm-enable-copilot t)
   :init
   (global-lsp-bridge-mode)
   :bind
   (:map acm-mode-map
-	("C-m" . newline)
-	("C-j" . newline)))
+	("C-m" . nil)
+	("C-j" . nil)))
 #+end_src
 
 * Error/Diagnositcs
@@ -581,11 +581,13 @@ globalに呼び出せるやつ
 ^^------------
 _j_: journal
 _r_: roam
+_c_: capture
 _s_: sync CalDAV
 "
   ("j" hydra-org-journal/body)
   ("r" hydra-org-roam/body)
   ("s" org-caldav-sync)
+  ("c" org-capture)
   ("C-m" nil)
   ("q" nil))
 (define-key global-map (kbd "<f2>") 'hydra-org/body)
@@ -664,10 +666,7 @@ orgファイルへのワンショットの書き込み
    '(("t" "Todo" entry (file "~/org/todo.org")
       "* TODO %?\n")
      ("s" "Schedule" entry (file "~/org/schedule.org")
-      "* %?\n")))
-  :bind
-  (:map global-map
-	("C-c c" . 'org-capture)))
+      "* %?\n"))))
 #+end_src
 - doc :: [[https://orgmode.org/manual/Capture.html]]
   
